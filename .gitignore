@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+# TypeScript cache
+tsconfig.tsbuildinfo
+
+# Local UI/UX skill clone (don't upload)
+ui-ux-pro-max-skill/
