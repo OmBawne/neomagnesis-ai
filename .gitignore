@@ -22,3 +22,4 @@ tsconfig.tsbuildinfo
 
 # Local UI/UX skill clone (don't upload)
 ui-ux-pro-max-skill/
+.agents/
