@@ -17,6 +17,7 @@ const config: Config = {
           gray: '#8F9693',
           muted: '#D8D6CF',
           ivory: '#F1EFE8',
+          canvas: '#E5EAE6',
         },
         cream: '#F5F3ED',
         // Keep base for dashboard compatibility

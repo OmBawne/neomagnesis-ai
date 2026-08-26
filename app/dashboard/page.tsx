@@ -1,9 +1,9 @@
 'use client'
 
-import ChatView from '@/components/dashboard/ChatView'
-import { useChatReset } from './layout'
+import OverviewPage from '@/components/dashboard/OverviewPage'
+import { useAuth } from '@/components/auth/AuthContext'
 
 export default function DashboardPage() {
-  const { chatKey } = useChatReset()
-  return <ChatView resetKey={chatKey} />
+  const { user } = useAuth()
+  return <OverviewPage user={user} />
 }
