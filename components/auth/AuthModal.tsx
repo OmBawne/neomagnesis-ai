@@ -57,45 +57,79 @@ export default function AuthModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('[Auth] Login button clicked')
     const errs = validate(email, password, name, tab === 'signup')
     if (errs.length) { setErrors(errs); return }
     setErrors([])
     setLoading(true)
 
-    if (tab === 'signup') {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: name } },
-      })
-      setLoading(false)
-      if (error) {
-        setErrors([error.message])
-        return
-      }
-      if (data.session) {
+    try {
+      if (tab === 'signup') {
+        console.log('[Auth] Before supabase.auth.signUp')
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        })
+        console.log('[Auth] After Supabase response (signUp):', { data, error })
+        if (error) {
+          setErrors([error.message])
+          return
+        }
+        if (data.session) {
+          closeAuthModal()
+          router.push('/dashboard')
+          router.refresh()
+        } else {
+          setMessage('Check your email to confirm your account before logging in.')
+        }
+      } else {
+        console.log('[Auth] Before supabase.auth.signInWithPassword')
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+        console.log('[Auth] After Supabase response (signInWithPassword):', { data, error })
+        if (error) {
+          setErrors([error.message])
+          return
+        }
         closeAuthModal()
         router.push('/dashboard')
-      } else {
-        setMessage('Check your email to confirm your account before logging in.')
+        router.refresh()
       }
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+    } catch (err: any) {
+      console.error('[Auth] Inside catch:', err)
+      setErrors([err?.message || 'An unexpected error occurred during authentication.'])
+    } finally {
+      console.log('[Auth] Inside finally')
       setLoading(false)
-      if (error) {
-        setErrors([error.message])
-        return
-      }
-      closeAuthModal()
-      router.push('/dashboard')
     }
   }
 
   const handleGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/dashboard` },
-    })
+    console.log('[Auth] Google login button clicked')
+    setErrors([])
+    setLoading(true)
+    try {
+      console.log('[Auth] Before supabase.auth.signInWithOAuth')
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+      console.log('[Auth] After Supabase response (signInWithOAuth):', { data, error })
+      if (error) {
+        setErrors([error.message])
+      }
+    } catch (err: any) {
+      console.error('[Auth] Inside catch (Google OAuth):', err)
+      setErrors([err?.message || 'Failed to sign in with Google.'])
+    } finally {
+      console.log('[Auth] Inside finally (Google OAuth)')
+      setLoading(false)
+    }
   }
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -160,8 +194,10 @@ export default function AuthModal() {
 
             {/* Google OAuth Button */}
             <button
+              type="button"
               onClick={handleGoogle}
-              className="w-full flex items-center justify-center gap-3 py-2.5 rounded-lg border border-[rgba(143,150,147,0.15)] bg-[#181B1A] text-[#D8D6CF] text-xs font-mono font-medium hover:border-[rgba(143,150,147,0.3)] hover:text-[#F1EFE8] transition-all mb-5 cursor-pointer"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-3 py-2.5 rounded-lg border border-[rgba(143,150,147,0.15)] bg-[#181B1A] text-[#D8D6CF] text-xs font-mono font-medium hover:border-[rgba(143,150,147,0.3)] hover:text-[#F1EFE8] transition-all mb-5 cursor-pointer disabled:opacity-50"
             >
               <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
                 <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
