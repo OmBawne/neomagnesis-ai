@@ -1,17 +1,12 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Sidebar from '@/components/dashboard/Sidebar'
 import AIRail from '@/components/dashboard/AIRail'
 import { Logo } from '@/components/shared/Logo'
-
-const ChatResetContext = createContext<{ chatKey: number; newChat: () => void }>({
-  chatKey: 0,
-  newChat: () => {},
-})
-export const useChatReset = () => useContext(ChatResetContext)
+import { ChatResetContext } from '@/lib/chat-reset-context'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -34,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#E5EAE6',
+          background: '#E8ECE8',
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
@@ -60,7 +55,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         style={{
           minHeight: '100vh',
           width: '100%',
-          background: '#E5EAE6',
+          background: '#E8ECE8',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

@@ -10,10 +10,10 @@ import {
   Zap,
   Database,
   Plus,
-  MoreHorizontal,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Sparkline from './Sparkline'
+import { getStorageUsage } from '@/lib/system'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface User {
@@ -26,6 +26,7 @@ interface OverviewPageProps {
 }
 
 // ─── Time-based greeting ──────────────────────────────────────────────────────
+// Uses local device time — no server time dependency.
 function getGreeting(name: string | null): string {
   const hour = new Date().getHours()
   const salutation =
@@ -40,116 +41,60 @@ function getGreeting(name: string | null): string {
   return name ? `${salutation}, ${name}.` : `${salutation}.`
 }
 
-// ─── Analytics card data ──────────────────────────────────────────────────────
+// ─── Analytics cards — real application state ─────────────────────────────────
+// Values reflect actual data. When no data exists, display 0.
+// Never display invented analytics.
+//
+// TODO (Tauri / backend):
+// Replace these values with real queries once a data layer exists:
+//   - Total Agents: query local agent registry
+//   - Active Workflows: query workflow engine
+//   - Running Tasks: query task executor
+//   - Storage: invoke('get_storage_usage') via lib/system.ts
 const ANALYTICS_CARDS = [
   {
     id: 'agents',
     title: 'Total Agents',
-    value: '35',
+    value: '0',
     icon: Users,
     color: '#3DB882',
-    data: [12, 18, 14, 22, 19, 28, 24, 30, 28, 35, 32, 35],
+    // Sparkline data zeroed — no agents registered yet
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
   {
-    id: 'workflows1',
+    id: 'workflows',
     title: 'Active Workflows',
-    value: '12',
+    value: '0',
     icon: GitBranch,
     color: '#8B5CF6',
-    data: [5, 8, 6, 10, 7, 9, 11, 8, 12, 10, 11, 12],
+    // Sparkline data zeroed — no active workflows
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
   {
-    id: 'executions',
-    title: 'Active Workflows',
-    value: '12',
+    id: 'tasks',
+    title: 'Running Tasks',
+    value: '0',
     icon: Zap,
     color: '#F59E0B',
-    data: [8, 6, 9, 5, 11, 7, 10, 8, 12, 9, 11, 12],
+    // Sparkline data zeroed — no running tasks
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
   {
     id: 'storage',
     title: 'Storage Used',
-    value: '1.2TB',
+    // Sourced from lib/system.ts — honest detecting state in browser,
+    // will show real value after Tauri migration.
+    value: getStorageUsage(),
     icon: Database,
     color: '#3B82F6',
-    data: [0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.2],
-  },
-]
-
-// ─── Workflow table data ──────────────────────────────────────────────────────
-type WorkflowStatus = 'Executing' | 'Queued' | 'Compute'
-
-interface WorkflowRow {
-  id: string
-  name: string
-  sub: string
-  creatorInitials: string
-  creatorName: string
-  creatorColor: string
-  status: WorkflowStatus
-  timestamp: string
-  duration: string
-}
-
-const WORKFLOW_ROWS: WorkflowRow[] = [
-  {
-    id: '1',
-    name: 'Analyse-Folder',
-    sub: 'Created 3 minurs ago',
-    creatorInitials: 'JS',
-    creatorName: 'J. Smith',
-    creatorColor: '#6366f1',
-    status: 'Executing',
-    timestamp: 'Apr 14, 2023, 9:15 AM',
-    duration: '1h 22m',
-  },
-  {
-    id: '2',
-    name: 'Create Workflow',
-    sub: 'Created 3 minurs ago',
-    creatorInitials: 'AP',
-    creatorName: 'A. Patel',
-    creatorColor: '#8B5CF6',
-    status: 'Queued',
-    timestamp: 'Apr 13, 2023, 1:45 PM',
-    duration: '1h 22m',
-  },
-  {
-    id: '3',
-    name: 'Research Tipes',
-    sub: 'Created 2 minurs ago',
-    creatorInitials: 'MD',
-    creatorName: 'M. Dubois',
-    creatorColor: '#0EA5E9',
-    status: 'Compute',
-    timestamp: 'Apr 13, 2023, 3:35 PM',
-    duration: '1h 26m',
-  },
-  {
-    id: '4',
-    name: 'Summarde Files',
-    sub: 'Created 3 minurs ago',
-    creatorInitials: 'SG',
-    creatorName: 'S. Garcia',
-    creatorColor: '#10B981',
-    status: 'Compute',
-    timestamp: 'Apr 13, 2023, 3:25 PM',
-    duration: '1h 30m',
-  },
-  {
-    id: '5',
-    name: 'Analyse-Folder',
-    sub: 'Created 3 minurs ago',
-    creatorInitials: 'KL',
-    creatorName: 'K. Lee',
-    creatorColor: '#F59E0B',
-    status: 'Compute',
-    timestamp: 'Apr 13, 2023, 3:25 PM',
-    duration: '1h 32m',
+    // Sparkline data zeroed — will be populated by Tauri storage history
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   },
 ]
 
 // ─── Status pill config ───────────────────────────────────────────────────────
+type WorkflowStatus = 'Executing' | 'Queued' | 'Compute'
+
 const STATUS_CONFIG: Record<WorkflowStatus, { bg: string; color: string; dot: string }> = {
   Executing: {
     bg: 'rgba(59,130,246,0.14)',
@@ -183,6 +128,11 @@ export default function OverviewPage({ user }: OverviewPageProps) {
     if (full) return full.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)
     return user?.email?.[0]?.toUpperCase() ?? 'U'
   }, [user])
+
+  // Real workflows — empty array until actual data exists.
+  // Replace with a real data fetch (Supabase query / Tauri invoke) when ready.
+  // TODO: const workflows = await supabase.from('workflows').select('*').eq('user_id', user.id)
+  const workflows: never[] = []
 
   return (
     <div
@@ -219,15 +169,15 @@ export default function OverviewPage({ user }: OverviewPageProps) {
           Overview
         </span>
 
-        {/* Search bar — centered */}
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+        {/* Search bar — centered, refined vertical alignment */}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <motion.div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 8,
               width: 320,
-              height: 38,
+              height: 34,
               background: 'rgba(255,255,255,0.04)',
               border: '1px solid rgba(255,255,255,0.08)',
               borderRadius: 10,
@@ -248,6 +198,7 @@ export default function OverviewPage({ user }: OverviewPageProps) {
                 fontSize: 12.5,
                 color: '#F1EFE8',
                 fontFamily: 'inherit',
+                lineHeight: 1,
               }}
               onFocus={(e) => {
                 const parent = e.currentTarget.parentElement
@@ -406,16 +357,17 @@ export default function OverviewPage({ user }: OverviewPageProps) {
                   <Icon size={13} color="#4B5563" />
                 </div>
 
-                {/* Big number */}
+                {/* Value */}
                 <span
                   style={{
-                    fontSize: 30,
+                    fontSize: card.value.startsWith('Detecting') ? 11 : 30,
                     fontWeight: 700,
-                    color: '#F1EFE8',
-                    letterSpacing: '-0.03em',
+                    color: card.value.startsWith('Detecting') ? '#4B5563' : '#F1EFE8',
+                    letterSpacing: card.value.startsWith('Detecting') ? '0' : '-0.03em',
+                    fontStyle: card.value.startsWith('Detecting') ? 'italic' : 'normal',
                     lineHeight: 1,
                     marginBottom: 14,
-                  }}
+                  } as React.CSSProperties}
                 >
                   {card.value}
                 </span>
@@ -465,7 +417,8 @@ export default function OverviewPage({ user }: OverviewPageProps) {
               Workflows
             </span>
 
-            <button
+            <motion.button
+              whileHover={{ background: 'rgba(255,255,255,0.08)' } as any}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -478,65 +431,76 @@ export default function OverviewPage({ user }: OverviewPageProps) {
                 fontSize: 11,
                 fontWeight: 500,
                 color: '#8F9693',
-                transition: 'background 0.12s',
-              }}
-              onMouseEnter={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.background =
-                  'rgba(255,255,255,0.08)'
-              }}
-              onMouseLeave={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.background =
-                  'rgba(255,255,255,0.05)'
               }}
             >
               <Plus size={11} />
               Expand
-            </button>
+            </motion.button>
           </div>
 
-          {/* Table header */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '2fr 1.2fr 1fr 1.6fr 0.8fr 0.5fr',
-              padding: '8px 18px',
-              borderBottom: '1px solid rgba(255,255,255,0.04)',
-            }}
-          >
-            {['Workflow Name', 'Creator', 'Status', 'Timestamp', 'Duration', 'Actions'].map(
-              (col) => (
-                <span
-                  key={col}
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 600,
-                    color: '#4B5563',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.07em',
-                  }}
-                >
-                  {col}
-                </span>
-              )
-            )}
-          </div>
+          {/* Table — renders real data or premium empty state */}
+          {workflows.length > 0 ? (
+            <>
+              {/* Table header */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '2fr 1.2fr 1fr 1.6fr 0.8fr 0.5fr',
+                  padding: '8px 18px',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                }}
+              >
+                {['Workflow Name', 'Creator', 'Status', 'Timestamp', 'Duration', 'Actions'].map(
+                  (col) => (
+                    <span
+                      key={col}
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 600,
+                        color: '#4B5563',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.07em',
+                      }}
+                    >
+                      {col}
+                    </span>
+                  )
+                )}
+              </div>
 
-          {/* Table rows */}
-          {WORKFLOW_ROWS.map((row, i) => (
-            <WorkflowRow
-              key={row.id}
-              row={row}
-              isLast={i === WORKFLOW_ROWS.length - 1}
-            />
-          ))}
+              {/* Workflow rows — mapped from real data */}
+              {workflows.map((row: any, i: number) => (
+                <WorkflowTableRow
+                  key={row.id}
+                  row={row}
+                  isLast={i === workflows.length - 1}
+                />
+              ))}
+            </>
+          ) : (
+            <WorkflowEmptyState />
+          )}
         </div>
       </div>
     </div>
   )
 }
 
-// ─── Workflow table row ───────────────────────────────────────────────────────
-function WorkflowRow({ row, isLast }: { row: WorkflowRow; isLast: boolean }) {
+// ─── Workflow table row — renders real workflow data ──────────────────────────
+// Shape matches a future Supabase or Tauri workflow record.
+interface WorkflowRowData {
+  id: string
+  name: string
+  sub: string
+  creatorInitials: string
+  creatorName: string
+  creatorColor: string
+  status: WorkflowStatus
+  timestamp: string
+  duration: string
+}
+
+function WorkflowTableRow({ row, isLast }: { row: WorkflowRowData; isLast: boolean }) {
   const pill = STATUS_CONFIG[row.status]
 
   return (
@@ -569,7 +533,7 @@ function WorkflowRow({ row, isLast }: { row: WorkflowRow; isLast: boolean }) {
         </div>
       </div>
 
-      {/* Creator avatar + name */}
+      {/* Creator */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
         <div
           style={{
@@ -642,9 +606,99 @@ function WorkflowRow({ row, isLast }: { row: WorkflowRow; isLast: boolean }) {
             alignItems: 'center',
           }}
         >
-          <MoreHorizontal size={14} color="#4B5563" />
+          <span style={{ fontSize: 14, color: '#4B5563', lineHeight: 1 }}>⋯</span>
         </button>
       </div>
     </motion.div>
+  )
+}
+
+// ─── Premium empty state ──────────────────────────────────────────────────────
+// Shown when zero workflows exist. No fake data, no placeholders.
+function WorkflowEmptyState() {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '52px 24px',
+        gap: 0,
+      }}
+    >
+      {/* Icon container */}
+      <div
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: 14,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 18,
+        }}
+      >
+        <GitBranch size={20} color="#4B5563" />
+      </div>
+
+      {/* Title */}
+      <h3
+        style={{
+          fontSize: 14,
+          fontWeight: 600,
+          color: '#E5E3DC',
+          letterSpacing: '-0.01em',
+          marginBottom: 8,
+          textAlign: 'center',
+        }}
+      >
+        No workflows yet
+      </h3>
+
+      {/* Subtitle */}
+      <p
+        style={{
+          fontSize: 12.5,
+          color: '#4B5563',
+          fontWeight: 400,
+          textAlign: 'center',
+          lineHeight: 1.6,
+          maxWidth: 280,
+          marginBottom: 24,
+        }}
+      >
+        Create your first AI workflow to start automating tasks.
+      </p>
+
+      {/* Create Workflow CTA */}
+      <motion.button
+        whileHover={{
+          background: 'rgba(241,239,232,0.14)',
+          borderColor: 'rgba(241,239,232,0.18)',
+          y: -1,
+          transition: { duration: 0.15 },
+        }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          background: 'rgba(241,239,232,0.07)',
+          border: '1px solid rgba(241,239,232,0.12)',
+          borderRadius: 9,
+          padding: '8px 18px',
+          cursor: 'pointer',
+          fontSize: 12.5,
+          fontWeight: 500,
+          color: '#E5E3DC',
+          letterSpacing: '-0.005em',
+        }}
+      >
+        <Plus size={13} />
+        Create Workflow
+      </motion.button>
+    </div>
   )
 }
