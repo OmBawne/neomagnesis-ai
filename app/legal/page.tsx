@@ -282,27 +282,30 @@ Email: neomagnesisai@gmail.com
 ]
 
 export const metadata = {
-  title: 'Legal — Neomagnesis AI',
+  title: 'Legal & Governance — Neomagnesis AI',
   description: 'Privacy Policy, Terms of Service, and Terms & Conditions for Neomagnesis AI.',
 }
 
 export default function LegalPage() {
   return (
-    <div className="min-h-screen bg-base">
-      {/* Back button */}
-      <div className="sticky top-0 z-10 bg-base/80 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-4">
+    <div className="min-h-screen bg-[#080909] text-[#F1EFE8]">
+      {/* Sticky Top Bar */}
+      <div className="sticky top-0 z-30 bg-[#080909]/80 backdrop-blur-xl border-b border-[#2A2D2C]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-xs font-mono text-[#9AA19E] hover:text-[#F1EFE8] transition-colors"
           >
-            <ArrowLeft size={15} />
-            Back to Home
+            <ArrowLeft size={14} />
+            <span>Back to Home</span>
           </Link>
-          <span className="text-slate-700">|</span>
-          <nav className="flex items-center gap-4 overflow-x-auto">
-            {sections.map(s => (
-              <a key={s.id} href={`#${s.id}`} className="text-xs text-slate-500 hover:text-slate-300 transition-colors whitespace-nowrap">
+          <nav className="flex items-center gap-4 overflow-x-auto text-xs font-mono">
+            {sections.map((s) => (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                className="text-[#9AA19E] hover:text-[#C87D55] transition-colors whitespace-nowrap"
+              >
                 {s.title}
               </a>
             ))}
@@ -311,53 +314,60 @@ export default function LegalPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
-        {/* Page title */}
+        {/* Page Title Header */}
         <div className="mb-14 text-center">
           <div className="flex justify-center mb-5">
-            <Logo variant="icon" width={44} height={44} />
+            <Logo variant="icon" width={48} height={48} />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Legal Documents</h1>
-          <p className="text-slate-500 text-base">Effective Date: June 1, 2026</p>
+          <h1 className="text-3xl sm:text-4xl font-light text-[#F1EFE8] mb-2 tracking-tight">
+            Legal &amp; Governance
+          </h1>
+          <p className="text-xs font-mono text-[#9AA19E]">Effective Date: June 1, 2026</p>
         </div>
 
         {/* Sections */}
         <div className="space-y-16">
           {sections.map((section, i) => (
             <div key={section.id} id={section.id} className="scroll-mt-20">
-              <div className="mb-8 pb-4 border-b border-white/[0.08]">
-                <span className="text-xs font-medium text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 px-2.5 py-1 rounded-full">
-                  Section {i + 1}
+              <div className="mb-8 pb-4 border-b border-[#2A2D2C]">
+                <span className="text-[10px] font-mono uppercase text-[#C87D55] bg-[#C87D55]/10 border border-[#C87D55]/30 px-2.5 py-1 rounded-full">
+                  Section 0{i + 1}
                 </span>
-                <h2 className="text-2xl font-bold text-white mt-3">{section.title}</h2>
+                <h2 className="text-2xl font-light text-[#F1EFE8] mt-3">{section.title}</h2>
               </div>
               <div
-                className="prose prose-invert max-w-none"
-                style={{ color: '#94a3b8', lineHeight: '1.9', fontSize: '1rem' }}
+                className="prose prose-invert max-w-none text-[#9AA19E] text-sm leading-relaxed"
+                style={{ lineHeight: '1.8' }}
               >
                 {section.content.split('\n\n').map((para, pi) => {
                   if (para.startsWith('•')) {
-                    const items = para.split('\n').filter(l => l.startsWith('•'))
+                    const items = para.split('\n').filter((l) => l.startsWith('•'))
                     return (
-                      <ul key={pi} style={{ marginBottom: '1.2rem', paddingLeft: '1.2rem' }}>
+                      <ul key={pi} className="my-4 pl-5 space-y-1.5 list-disc text-[#9AA19E]">
                         {items.map((item, ii) => (
-                          <li key={ii} style={{ marginBottom: '0.4rem', color: '#94a3b8' }}>
+                          <li key={ii}>
                             {item.replace('• ', '')}
                           </li>
                         ))}
                       </ul>
                     )
                   }
-                  // Heading lines (numbered)
+                  // Numbered heading
                   if (/^\d+\./.test(para) && para.length < 80) {
                     return (
-                      <h3 key={pi} style={{ color: '#e2e8f0', fontWeight: 600, fontSize: '1.05rem', marginTop: '2rem', marginBottom: '0.75rem' }}>
+                      <h3
+                        key={pi}
+                        className="text-[#F1EFE8] font-normal text-base mt-6 mb-2"
+                      >
                         {para}
                       </h3>
                     )
                   }
                   if (para.trim()) {
                     return (
-                      <p key={pi} style={{ marginBottom: '1.2rem' }}>{para}</p>
+                      <p key={pi} className="mb-4">
+                        {para}
+                      </p>
                     )
                   }
                   return null
@@ -368,14 +378,17 @@ export default function LegalPage() {
         </div>
 
         {/* Footer */}
-        <div className="mt-20 pt-8 border-t border-white/[0.06] text-center">
-          <p className="text-sm text-slate-600">
-            Questions? Contact us at{' '}
-            <a href="mailto:neomagnesisai@gmail.com" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+        <div className="mt-20 pt-8 border-t border-[#2A2D2C] text-center text-xs font-mono text-[#9AA19E]">
+          <p>
+            Direct inquiries:{' '}
+            <a
+              href="mailto:neomagnesisai@gmail.com"
+              className="text-[#C87D55] hover:underline"
+            >
               neomagnesisai@gmail.com
             </a>
           </p>
-          <p className="text-xs text-slate-700 mt-2">© 2026 Neomagnesis AI. All rights reserved.</p>
+          <p className="mt-2 text-[#626A66]">© 2026 Neomagnesis AI. All rights reserved.</p>
         </div>
       </div>
     </div>

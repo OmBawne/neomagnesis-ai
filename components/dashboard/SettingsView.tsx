@@ -158,59 +158,25 @@ export default function SettingsView() {
               className="max-w-lg space-y-6"
             >
               <div>
-                <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">Appearance</h2>
-                <p className="text-xs text-slate-600 dark:text-slate-500 mb-6">Choose how Neomagnesis AI looks to you. Your preference is saved locally.</p>
+                <h2 className="text-sm font-semibold text-[#F1EFE8] mb-1">Appearance</h2>
+                <p className="text-xs text-[#9AA19E] mb-6">Neomagnesis AI is permanently engineered in a calibrated Ink Wash Dark operating system.</p>
 
                 <div className="space-y-3">
-                  {/* Dark mode option */}
-                  <button
-                    onClick={() => setTheme('dark')}
-                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left ${
-                      theme === 'dark'
-                        ? 'border-indigo-500/40 bg-indigo-500/10'
-                        : 'border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12]'
-                    }`}
+                  {/* Ink Wash Dark Mode */}
+                  <div
+                    className="w-full flex items-center gap-4 p-4 rounded-xl border border-[#B87333]/40 bg-[#181B1A] text-left"
                   >
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      theme === 'dark' ? 'bg-indigo-500/20 border border-indigo-500/30' : 'bg-white/[0.05] border border-white/[0.08]'
-                    }`}>
-                      <Moon size={16} className={theme === 'dark' ? 'text-indigo-400' : 'text-slate-500'} />
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#111312] border border-[#2A2D2C]">
+                      <Moon size={16} className="text-[#B87333]" />
                     </div>
                     <div className="flex-1">
-                      <p className={`text-sm font-medium ${theme === 'dark' ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}>Dark Mode</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-600 mt-0.5">Easy on the eyes, great for low-light environments</p>
+                      <p className="text-sm font-medium text-[#F1EFE8]">Ink Wash Dark (Permanent)</p>
+                      <p className="text-xs text-[#9AA19E] mt-0.5">Sumi ink black (#080909) with washi ivory &amp; soft copper accents</p>
                     </div>
-                    {theme === 'dark' && (
-                      <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center flex-shrink-0">
-                        <Check size={11} className="text-white" />
-                      </div>
-                    )}
-                  </button>
-
-                  {/* Light mode option */}
-                  <button
-                    onClick={() => setTheme('light')}
-                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left ${
-                      theme === 'light'
-                        ? 'border-indigo-500/40 bg-indigo-500/10'
-                        : 'border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12]'
-                    }`}
-                  >
-                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      theme === 'light' ? 'bg-indigo-500/20 border border-indigo-500/30' : 'bg-white/[0.05] border border-white/[0.08]'
-                    }`}>
-                      <Sun size={16} className={theme === 'light' ? 'text-indigo-400' : 'text-slate-500'} />
+                    <div className="w-5 h-5 rounded-full bg-[#B87333] flex items-center justify-center flex-shrink-0">
+                      <Check size={11} className="text-[#080909]" />
                     </div>
-                    <div className="flex-1">
-                      <p className={`text-sm font-medium ${theme === 'light' ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-400'}`}>Light Mode</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-600 mt-0.5">Clean, minimal, and great for daytime use</p>
-                    </div>
-                    {theme === 'light' && (
-                      <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center flex-shrink-0">
-                        <Check size={11} className="text-white" />
-                      </div>
-                    )}
-                  </button>
+                  </div>
                 </div>
               </div>
             </motion.div>

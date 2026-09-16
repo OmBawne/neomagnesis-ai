@@ -11,40 +11,44 @@ interface FooterLinkItem {
 }
 
 const footerLinks: Record<string, FooterLinkItem[]> = {
-  Platform: [
-    { label: 'Capabilities', href: '#what-we-do' },
-    { label: 'Agentic Loop', href: '#agentic-ai' },
-    { label: 'Workflow Engine', href: '#automation' },
-    { label: 'Interface Telemetry', href: '#showcase' },
+  Architecture: [
+    { label: 'Philosophy', href: '#philosophy' },
+    { label: 'Why Local-First', href: '#why-local-first' },
+    { label: 'Workflow Vision', href: '#workflows' },
     { label: 'Use Cases', href: '#use-cases' },
   ],
-  Company: [
-    { label: 'Philosophy', href: '#why-neomagnesis' },
-    { label: 'Community', href: '#community' },
-    { label: 'Careers', href: '#hiring' },
-    { label: 'Discord', href: 'https://discord.gg/neomagnesis', external: true },
-    { label: 'Instagram', href: 'https://instagram.com/neomagnesis.ai', external: true },
+  Project: [
+    { label: 'Access & Membership', href: '#pricing' },
+    { label: 'Public Roadmap', href: '#roadmap' },
+    { label: 'Early Access', href: '#early-access' },
+    { label: 'Discord Community', href: 'https://discord.gg/neomagnesis', external: true },
   ],
   Governance: [
     { label: 'Privacy Policy', href: '/legal' },
     { label: 'Terms of Service', href: '/legal' },
-    { label: 'Security & Privacy', href: '/legal' },
-    { label: 'Contact Engineering', href: 'mailto:neomagnesisai@gmail.com' },
+    { label: 'Security & AI Transparency', href: '/legal' },
+    { label: 'Contact', href: 'mailto:neomagnesisai@gmail.com' },
   ],
 }
 
-export default function Footer() {
+export function Footer() {
   return (
-    <footer className="relative border-t border-[rgba(143,150,147,0.12)] pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <footer className="relative border-t border-[#2A2D2C] pt-24 pb-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
         {/* Brand Column (5 cols) */}
         <div className="md:col-span-5 space-y-4">
           <Logo width={140} height={32} href="/" />
-          <p className="text-sm text-[#8F9693] leading-relaxed max-w-sm pt-2">
-            The sovereign operating system for autonomous workflows. Reason over complex intent, coordinate tools dynamically, and execute with deterministic precision.
+          <p className="text-sm text-[#9AA19E] leading-relaxed max-w-sm pt-2">
+            The Local-First Agentic AI Operating System. Sovereign intelligence, local-first execution, and timeless craftsmanship.
           </p>
-          <div className="pt-2 text-xs font-mono text-[#8F9693]">
-            Direct inquiries: <a href="mailto:neomagnesisai@gmail.com" className="text-[#D8D6CF] hover:underline">neomagnesisai@gmail.com</a>
+          <div className="pt-2 text-xs font-mono text-[#626A66]">
+            Direct contact:{' '}
+            <a
+              href="mailto:neomagnesisai@gmail.com"
+              className="text-[#9AA19E] hover:text-[#C87D55] transition-colors"
+            >
+              neomagnesisai@gmail.com
+            </a>
           </div>
         </div>
 
@@ -52,14 +56,16 @@ export default function Footer() {
         <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h4 className="text-xs font-mono uppercase tracking-wider text-[#8F9693] mb-4">{heading}</h4>
+              <h4 className="text-xs font-mono uppercase tracking-wider text-[#F1EFE8] mb-4">
+                {heading}
+              </h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
                     {link.href.startsWith('/legal') ? (
                       <Link
                         href={link.href}
-                        className="text-xs text-[#8F9693] hover:text-[#F1EFE8] transition-colors"
+                        className="text-xs text-[#9AA19E] hover:text-[#F1EFE8] transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -68,7 +74,7 @@ export default function Footer() {
                         href={link.href}
                         target={link.external ? '_blank' : undefined}
                         rel={link.external ? 'noopener noreferrer' : undefined}
-                        className="text-xs text-[#8F9693] hover:text-[#F1EFE8] transition-colors inline-flex items-center gap-1"
+                        className="text-xs text-[#9AA19E] hover:text-[#F1EFE8] transition-colors inline-flex items-center gap-1"
                       >
                         {link.label}
                         {link.external && <ArrowUpRight size={11} className="opacity-70" />}
@@ -83,14 +89,16 @@ export default function Footer() {
       </div>
 
       {/* Bottom Legal Bar */}
-      <div className="pt-8 border-t border-[rgba(143,150,147,0.08)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#8F9693]">
+      <div className="pt-8 border-t border-[#2A2D2C] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#626A66]">
         <div>&copy; {new Date().getFullYear()} Neomagnesis AI. All rights reserved.</div>
-        <div className="flex items-center gap-4">
-          <span>Encrypted Architecture</span>
+        <div className="flex items-center gap-4 text-[#9AA19E]">
+          <span>Local-First Architecture</span>
           <span>·</span>
-          <span>Zero Data Training</span>
+          <span>Air-Gapped Execution</span>
         </div>
       </div>
     </footer>
   )
 }
+
+export default Footer

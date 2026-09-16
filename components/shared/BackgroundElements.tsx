@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useTheme } from '@/lib/theme'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Particle {
@@ -17,18 +16,12 @@ interface Particle {
   speed: number
 }
 
-// ─── Ink Wash color palettes ──────────────────────────────────────────────────
+// ─── Ink Wash Dark color palette ──────────────────────────────────────────────
 const DARK_COLORS = [
-  'rgba(143, 150, 147,',  // ink-gray
-  'rgba(216, 214, 207,',  // ink-muted
-  'rgba(143, 150, 147,',  // ink-gray (weighted)
-  'rgba(241, 239, 232,',  // ink-ivory (rare)
-]
-
-const LIGHT_COLORS = [
-  'rgba(143, 150, 147,',  // ink-gray
-  'rgba(24, 27, 26,',     // ink-graphite
-  'rgba(17, 19, 18,',     // ink-charcoal
+  'rgba(154, 161, 158,',  // ink-mist
+  'rgba(42, 45, 44,',     // ink-border stone
+  'rgba(154, 161, 158,',  // ink-mist (weighted)
+  'rgba(241, 239, 232,',  // ink-ivory (subtle, rare)
 ]
 
 // ─── Flow field helper ────────────────────────────────────────────────────────
@@ -37,20 +30,14 @@ function flowAngle(x: number, y: number, t: number): number {
   const sx = x * scale
   const sy = y * scale
   return (
-    Math.sin(sx + t * 0.1) * Math.cos(sy * 0.7 + t * 0.08) * Math.PI * 2 +
-    Math.sin(sx * 1.2 - sy * 0.8 + t * 0.06) * 0.5
+    Math.sin(sx + t * 0.08) * Math.cos(sy * 0.7 + t * 0.06) * Math.PI * 2 +
+    Math.sin(sx * 1.2 - sy * 0.8 + t * 0.05) * 0.5
   )
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function BackgroundElements() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { theme } = useTheme()
-  const themeRef = useRef(theme)
-
-  useEffect(() => {
-    themeRef.current = theme
-  }, [theme])
 
   useEffect(() => {
     // Respect reduced motion
@@ -73,44 +60,41 @@ export function BackgroundElements() {
     }
     resize()
 
-    // Dramatically reduced particle counts
     function countForDevice(): number {
       const w = window.innerWidth
-      if (w < 480)  return 25
-      if (w < 768)  return 35
-      if (w < 1280) return 55
-      return 80
+      if (w < 480)  return 20
+      if (w < 768)  return 30
+      if (w < 1280) return 45
+      return 60
     }
 
     function makeParticles() {
-      const isLight = themeRef.current === 'light'
-      const palette = isLight ? LIGHT_COLORS : DARK_COLORS
-      const count   = countForDevice()
+      const count = countForDevice()
       particles = []
 
       for (let i = 0; i < count; i++) {
-        const color = palette[Math.floor(Math.random() * palette.length)]
+        const color = DARK_COLORS[Math.floor(Math.random() * DARK_COLORS.length)]
         particles.push({
           x: Math.random() * canvas!.width,
           y: Math.random() * canvas!.height,
           vx: 0,
           vy: 0,
-          size: Math.random() * 1.2 + 0.4,
+          size: Math.random() * 1.1 + 0.4,
           opacity: 0,
-          baseOpacity: (Math.random() * 0.15 + 0.03),
+          baseOpacity: (Math.random() * 0.12 + 0.02),
           color,
           angle: Math.random() * Math.PI * 2,
-          speed: (Math.random() * 0.15 + 0.08),
+          speed: (Math.random() * 0.12 + 0.06),
         })
       }
     }
 
     makeParticles()
 
-    // Mouse interaction (very subtle)
+    // Mouse interaction (subtle)
     const mouse = { x: -9999, y: -9999 }
-    const REPEL_RADIUS = 180
-    const REPEL_STRENGTH = 1.5
+    const REPEL_RADIUS = 160
+    const REPEL_STRENGTH = 1.2
 
     function onMouseMove(e: MouseEvent) { mouse.x = e.clientX; mouse.y = e.clientY }
     function onMouseLeave() { mouse.x = -9999; mouse.y = -9999 }
@@ -128,7 +112,7 @@ export function BackgroundElements() {
       const w = canvas!.width
       const h = canvas!.height
       ctx!.clearRect(0, 0, w, h)
-      t += 0.012
+      t += 0.01
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
@@ -192,7 +176,7 @@ export function BackgroundElements() {
           inset: 0,
           zIndex: -2,
           pointerEvents: 'none',
-          opacity: 0.018,
+          opacity: 0.015,
           mixBlendMode: 'screen',
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -217,3 +201,4 @@ export function BackgroundElements() {
     </>
   )
 }
+

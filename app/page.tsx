@@ -1,30 +1,45 @@
-import Navbar from '@/components/landing/Navbar'
+import Dock from '@/components/landing/Dock'
 import Hero from '@/components/landing/Hero'
-import WhatWeDo from '@/components/landing/WhatWeDo'
-import AgenticAI from '@/components/landing/AgenticAI'
-import Automation from '@/components/landing/Automation'
-import ProductShowcase from '@/components/landing/ProductShowcase'
-import UseCases from '@/components/landing/UseCases'
-import WhyNeomagnesis from '@/components/landing/WhyNeomagnesis'
-import Community from '@/components/landing/Community'
-import Hiring from '@/components/landing/Hiring'
-import FinalCTA from '@/components/landing/FinalCTA'
-import Footer from '@/components/landing/Footer'
+import PhilosophySection from '@/components/landing/PhilosophySection'
+import WhyLocalFirst from '@/components/landing/WhyLocalFirst'
+import { WorkflowVision } from '@/components/landing/WorkflowVision'
+import { UseCases } from '@/components/landing/UseCases'
+import { PricingSection } from '@/components/landing/PricingSection'
+import { RoadmapSection } from '@/components/landing/RoadmapSection'
+import { EarlyAccessSection } from '@/components/landing/EarlyAccessSection'
+import { Footer } from '@/components/landing/Footer'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-ink-black text-ink-ivory selection:bg-ink-ivory selection:text-ink-black overflow-x-hidden">
-      <Navbar />
+    <main className="min-h-screen bg-[#080909] text-[#F1EFE8] selection:bg-[#F1EFE8] selection:text-[#080909] overflow-x-hidden relative">
+      {/* Floating macOS-inspired Dock navigation */}
+      <Dock />
+
+      {/* 3D Living Core Hero */}
       <Hero />
-      <WhatWeDo />
-      <AgenticAI />
-      <Automation />
-      <ProductShowcase />
+
+      {/* Philosophy Section */}
+      <PhilosophySection />
+
+      {/* Why Local-First (Blueprint SVG Diagrams) */}
+      <WhyLocalFirst />
+
+      {/* Workflow Vision (Abstract Node Graphs) */}
+      <WorkflowVision />
+
+      {/* Applied Use Cases (Zero Fake Metrics) */}
       <UseCases />
-      <WhyNeomagnesis />
-      <Community />
-      <Hiring />
-      <FinalCTA />
+
+      {/* Access & Membership (Honest Early Access Program) */}
+      <PricingSection />
+
+      {/* Public Architectural Roadmap (Dateless Milestones) */}
+      <RoadmapSection />
+
+      {/* Priority Early Access Registration (Launch Pass) */}
+      <EarlyAccessSection />
+
+      {/* Global Footer */}
       <Footer />
     </main>
   )
