@@ -27,7 +27,7 @@ export function ScrollProgressLine() {
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}
-      className="fixed top-0 left-0 z-[100] h-px pointer-events-none"
+      className="fixed top-0 left-0 z-[99] h-px pointer-events-none"
       style={{
         width: `${progress}%`,
         background: 'var(--color-accent)',

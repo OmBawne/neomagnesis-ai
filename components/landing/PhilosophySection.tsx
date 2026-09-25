@@ -34,7 +34,7 @@ function Statement({ statement, index }: { statement: typeof statements[0]; inde
     >
       {/* Statement number */}
       <div className="lg:col-span-1 flex items-start pt-2">
-        <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#626A66]">
+        <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#A6B2AC] font-medium">
           {String(index + 1).padStart(2, '0')}
         </span>
       </div>
@@ -42,8 +42,8 @@ function Statement({ statement, index }: { statement: typeof statements[0]; inde
       {/* Main statement */}
       <div className="lg:col-span-7">
         <h3
-          className="font-light text-[#F1EFE8] leading-[1.1] tracking-[-0.025em]"
-          style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
+          className="font-light text-[#FAF8F5] leading-[1.05] tracking-[-0.03em]"
+          style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
         >
           {statement.text}
         </h3>
@@ -51,7 +51,7 @@ function Statement({ statement, index }: { statement: typeof statements[0]; inde
 
       {/* Supporting copy */}
       <div className="lg:col-span-4 flex items-start pt-1">
-        <p className="text-sm sm:text-base leading-relaxed text-[#626A66] font-light">
+        <p className="text-sm sm:text-base leading-relaxed text-[#C8D0CC] font-normal">
           {statement.sub}
         </p>
       </div>
@@ -73,15 +73,15 @@ export default function PhilosophySection() {
     <section
       id="philosophy"
       ref={sectionRef}
-      className="relative py-24 lg:py-32 px-5 sm:px-8"
+      className="relative py-16 lg:py-24 px-5 sm:px-8"
       style={{ borderTop: '1px solid #2A2D2C' }}
       aria-labelledby="philosophy-heading"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         {/* Overline */}
         <motion.div
           style={{ y: overlineY }}
-          className="mb-16 lg:mb-20"
+          className="mb-14 lg:mb-18"
         >
           <motion.span
             initial={{ opacity: 0, x: -12 }}
@@ -95,7 +95,7 @@ export default function PhilosophySection() {
         </motion.div>
 
         {/* Statements */}
-        <div id="philosophy-heading" className="sr-only">Philosophy</div>
+        <h2 id="philosophy-heading" className="sr-only">Core Philosophy</h2>
         {statements.map((statement, i) => (
           <Statement key={statement.id} statement={statement} index={i} />
         ))}
@@ -106,10 +106,10 @@ export default function PhilosophySection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="pt-16 flex items-center gap-6"
+          className="pt-12 lg:pt-16 flex items-center gap-6"
         >
-          <div className="w-12 h-px bg-[#B87333] opacity-60" />
-          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#626A66]">
+          <div className="w-16 h-px bg-[#E58B4E] opacity-75" />
+          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#A6B2AC] font-medium">
             Built differently
           </span>
         </motion.div>

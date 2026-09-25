@@ -17,45 +17,46 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://neomagnesis.ai'),
-  title: 'Neomagnesis AI | Local-First Agentic AI Operating System',
+  title: 'Neomagnesis AI — Local-First Agentic AI Operating System',
   description:
-    'Neomagnesis AI is a premium local-first Agentic AI Operating System built for intelligent workflow automation.',
+    'Neomagnesis AI is a local-first Agentic AI Operating System engineered for sovereign hardware execution, zero cloud telemetry, and intelligent workflow orchestration.',
   applicationName: 'Neomagnesis AI',
   keywords: [
     'Neomagnesis AI',
     'Neomagnesis',
-    'Local-First Agentic AI',
-    'Agentic AI Operating System',
-    'AI Workflow Automation',
-    'Autonomous Agents',
-    'Intelligent Automation',
+    'Local-First Agentic AI Operating System',
     'Local AI OS',
+    'Autonomous Agents',
+    'Local LLM Orchestration',
+    'Sovereign AI',
+    'Air-Gapped AI',
   ],
   authors: [{ name: 'Neomagnesis AI', url: 'https://neomagnesis.ai' }],
   creator: 'Neomagnesis AI',
   publisher: 'Neomagnesis AI',
   openGraph: {
-    title: 'Neomagnesis AI',
+    title: 'Neomagnesis AI — Local-First Agentic AI Operating System',
     description:
-      'Neomagnesis AI is a premium local-first Agentic AI Operating System built for intelligent workflow automation.',
+      'A local-first Agentic AI Operating System. Sovereign hardware execution, air-gapped security, and deterministic agent orchestration.',
     url: 'https://neomagnesis.ai',
     siteName: 'Neomagnesis AI',
     locale: 'en_US',
     type: 'website',
     images: [
       {
-        url: '/icon.png',
-        width: 512,
-        height: 512,
-        alt: 'Neomagnesis AI Logo',
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Neomagnesis AI — Local-First Agentic AI Operating System',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Neomagnesis AI',
+    title: 'Neomagnesis AI — Local-First Agentic AI Operating System',
     description:
-      'Neomagnesis AI is a premium local-first Agentic AI Operating System built for intelligent workflow automation.',
+      'A local-first Agentic AI Operating System. Sovereign hardware execution, air-gapped security, and deterministic agent orchestration.',
+    images: ['/twitter-image.png'],
   },
   robots: {
     index: true,
@@ -74,7 +75,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: '/apple-touch-icon.png',
@@ -89,10 +93,10 @@ const jsonLd = {
       '@id': 'https://neomagnesis.ai/#software',
       name: 'Neomagnesis AI',
       alternateName: ['Neomagnesis', 'Neomagnesis OS', 'Neomagnesis Agentic AI'],
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Windows, macOS',
+      applicationCategory: 'OperatingSystem',
+      operatingSystem: 'macOS, Windows, Linux',
       description:
-        'Neomagnesis AI is a premium local-first Agentic AI Operating System built for intelligent workflow automation.',
+        'Neomagnesis AI is a local-first Agentic AI Operating System built for sovereign workflow orchestration and offline intelligence.',
       url: 'https://neomagnesis.ai',
       offers: {
         '@type': 'Offer',
@@ -117,7 +121,7 @@ const jsonLd = {
       url: 'https://neomagnesis.ai',
       name: 'Neomagnesis AI',
       description:
-        'Neomagnesis AI is a premium local-first Agentic AI Operating System built for intelligent workflow automation.',
+        'Neomagnesis AI — Local-First Agentic AI Operating System.',
       publisher: {
         '@id': 'https://neomagnesis.ai/#organization',
       },
@@ -134,7 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-ink-bg text-ink-ivory antialiased">
+      <body className="bg-[#08090A] text-[#F1EFE8] antialiased">
         <ThemeProvider>
           <AuthProvider>
             <LoadingSequence />
@@ -148,4 +152,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   )
 }
-

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, ShieldCheck, Sparkles, Key, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Key, CheckCircle2 } from 'lucide-react'
 
 const foundingPerks = [
   'Priority access to private alpha and beta desktop builds',
@@ -13,11 +13,11 @@ const foundingPerks = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#2A2D2C]">
+    <section id="pricing" className="relative py-16 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
       {/* Header */}
-      <div className="max-w-3xl mb-16 sm:mb-20">
+      <div className="max-w-3xl mb-14 lg:mb-18">
         <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#9AA19E] mb-3 block">
-          // Access &amp; Membership
+          // Access & Membership
         </span>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#F1EFE8] tracking-[-0.025em] leading-[1.12] mb-6">
           Honest models. <br />
@@ -29,15 +29,15 @@ export function PricingSection() {
         </p>
       </div>
 
-      {/* Main Showcase Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-        {/* Left Card: Founding Cohort (8 cols) */}
+      {/* Main Showcase Grid - Single column, centered, generous */}
+      <div className="max-w-4xl mx-auto">
+        {/* Founding Cohort Card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-8 bg-[#0E100F] border border-[#2A2D2C] rounded-2xl p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden shadow-macos-panel"
+          className="surface-card p-8 sm:p-10 relative overflow-hidden"
         >
           {/* Subtle warm accent bar */}
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C87D55] via-[#C87D55]/30 to-transparent" />
@@ -91,37 +91,35 @@ export function PricingSection() {
           </div>
         </motion.div>
 
-        {/* Right Card: Our Pricing Philosophy (4 cols) */}
+        {/* Pricing Philosophy Card - below, not side-by-side */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-4 bg-[#111312] border border-[#2A2D2C] rounded-2xl p-8 flex flex-col justify-between shadow-macos-panel"
+          className="mt-8 surface-card p-8"
         >
-          <div>
-            <div className="w-10 h-10 rounded-lg bg-[#181B1A] border border-[#2A2D2C] flex items-center justify-center text-[#C87D55] mb-6">
-              <Key size={18} />
+          <div className="w-10 h-10 rounded-lg bg-[#181B1A] border border-[#2A2D2C] flex items-center justify-center text-[#C87D55] mb-6">
+            <Key size={18} />
+          </div>
+
+          <h3 className="text-xl font-light text-[#F1EFE8] mb-3">
+            Why No Fake Tiers?
+          </h3>
+          <p className="text-xs text-[#9AA19E] leading-relaxed mb-4">
+            Most AI platforms invent arbitrary pricing tiers with fake enterprise limits to artificially inflate valuation.
+          </p>
+          <p className="text-xs text-[#9AA19E] leading-relaxed mb-6">
+            Neomagnesis runs primarily on your hardware. You supply the compute; you own the results. Our pricing will reflect fair software licensing, not markups on cloud GPUs.
+          </p>
+
+          <div className="pt-6 border-t border-[#2A2D2C]">
+            <div className="text-[11px] font-mono text-[#9AA19E] uppercase tracking-wider mb-2">
+              Commitment
             </div>
-
-            <h3 className="text-xl font-light text-[#F1EFE8] mb-3">
-              Why No Fake Tiers?
-            </h3>
-            <p className="text-xs text-[#9AA19E] leading-relaxed mb-6">
-              Most AI platforms invent arbitrary pricing tiers with fake enterprise limits to artificially inflate valuation.
-            </p>
-            <p className="text-xs text-[#9AA19E] leading-relaxed mb-6">
-              Neomagnesis runs primarily on your hardware. You supply the compute; you own the results. Our pricing will reflect fair software licensing, not markups on cloud GPUs.
-            </p>
-
-            <div className="pt-6 border-t border-[#2A2D2C]">
-              <div className="text-[11px] font-mono text-[#9AA19E] uppercase tracking-wider mb-2">
-                Commitment
-              </div>
-              <div className="flex items-center gap-2 text-xs text-[#F1EFE8]">
-                <ShieldCheck size={14} className="text-[#5B7065]" />
-                <span>Zero vendor lock-in</span>
-              </div>
+            <div className="flex items-center gap-2 text-xs text-[#F1EFE8]">
+              <ShieldCheck size={14} className="text-[#5B7065]" />
+              <span>Zero vendor lock-in</span>
             </div>
           </div>
 

@@ -82,24 +82,24 @@ const milestones: Milestone[] = [
 
 export function RoadmapSection() {
   return (
-    <section id="roadmap" className="relative py-28 sm:py-36 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#2A2D2C]">
+    <section id="roadmap" className="relative py-16 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
       {/* Header */}
-      <div className="max-w-3xl mb-16 sm:mb-20">
-        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#9AA19E] mb-3 block">
+      <div className="max-w-3xl mb-14 lg:mb-18">
+        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#A6B2AC] mb-3 block font-medium">
           // Product Evolution
         </span>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#F1EFE8] tracking-[-0.025em] leading-[1.12] mb-6">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-6">
           Architectural roadmap. <br />
-          <span className="font-normal text-[#F1EFE8]">Milestones without speculation.</span>
+          <span className="font-normal text-[#FAF8F5]">Milestones without speculation.</span>
         </h2>
-        <p className="text-base sm:text-lg text-[#9AA19E] leading-relaxed font-normal">
+        <p className="text-base sm:text-lg text-[#C8D0CC] leading-relaxed font-normal">
           We do not publish artificial calendar deadlines. We advance through strict technical milestones,
           releasing each capability only when it satisfies our standards for privacy, stability, and craft.
         </p>
       </div>
 
       {/* Vertical Timeline */}
-      <div className="relative border-l border-[#2A2D2C] ml-3 sm:ml-6 pl-6 sm:pl-10 space-y-12">
+      <div className="relative border-l border-[#2A2D2C] ml-3 sm:ml-6 pl-6 sm:pl-10 space-y-10">
         {milestones.map((m, idx) => {
           const isCompleted = m.status === 'completed'
           const isInProgress = m.status === 'in-progress'
@@ -117,18 +117,18 @@ export function RoadmapSection() {
               <div
                 className={`absolute -left-[31px] sm:-left-[47px] top-1.5 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-300 ${
                   isInProgress
-                    ? 'bg-[#080909] border-[#C87D55] shadow-[0_0_12px_rgba(200,125,85,0.4)]'
+                    ? 'bg-[#080909] border-[#E58B4E] shadow-[0_0_12px_rgba(229,139,78,0.4)]'
                     : isCompleted
-                    ? 'bg-[#181B1A] border-[#5B7065] text-[#5B7065]'
-                    : 'bg-[#111312] border-[#2A2D2C] text-[#9AA19E]'
+                    ? 'bg-[#181B1A] border-[#7FA692] text-[#7FA692]'
+                    : 'bg-[#111312] border-[#2A2D2C] text-[#A6B2AC]'
                 }`}
               >
                 {isInProgress ? (
-                  <span className="w-2 h-2 rounded-full bg-[#C87D55] animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-[#E58B4E] animate-pulse" />
                 ) : isCompleted ? (
-                  <Check size={12} className="text-[#5B7065]" />
+                  <Check size={12} className="text-[#7FA692]" />
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2A2D2C]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3A3E3C]" />
                 )}
               </div>
 
@@ -136,53 +136,53 @@ export function RoadmapSection() {
               <div
                 className={`rounded-2xl p-6 sm:p-8 border transition-all duration-300 ${
                   isInProgress
-                    ? 'bg-[#121413] border-[#C87D55]/50 shadow-[0_0_30px_rgba(200,125,85,0.06)]'
-                    : 'bg-[#111312] border-[#2A2D2C] hover:border-[#9AA19E]/30'
+                    ? 'bg-[#121413] border-[#E58B4E]/50 shadow-[0_0_30px_rgba(229,139,78,0.06)]'
+                    : 'bg-[#111312] border-[#2A2D2C] hover:border-[#A6B2AC]/40'
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono uppercase tracking-widest text-[#9AA19E]">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#A6B2AC] font-medium">
                       {m.phase}
                     </span>
                     <span
                       className={`text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border ${
                         isInProgress
-                          ? 'bg-[#C87D55]/15 border-[#C87D55]/60 text-[#C87D55]'
+                          ? 'bg-[#E58B4E]/15 border-[#E58B4E]/60 text-[#E58B4E] font-medium'
                           : isCompleted
-                          ? 'bg-[#5B7065]/15 border-[#5B7065]/50 text-[#5B7065]'
-                          : 'bg-[#181B1A] border-[#2A2D2C] text-[#9AA19E]'
+                          ? 'bg-[#5B7065]/20 border-[#7FA692]/60 text-[#7FA692] font-medium'
+                          : 'bg-[#181B1A] border-[#2A2D2C] text-[#A6B2AC]'
                       }`}
                     >
                       {isInProgress ? 'In Progress' : isCompleted ? 'Completed' : 'Upcoming'}
                     </span>
                   </div>
                   {isInProgress && (
-                    <span className="text-xs font-mono text-[#C87D55] flex items-center gap-1.5">
+                    <span className="text-xs font-mono text-[#E58B4E] font-medium flex items-center gap-1.5">
                       <Radio size={13} className="animate-pulse" />
                       Active Focus
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-light text-[#F1EFE8] mb-3">
+                <h3 className="text-xl sm:text-2xl font-light text-[#FAF8F5] mb-3">
                   {m.title}
                 </h3>
-                <p className="text-sm text-[#9AA19E] leading-relaxed mb-6 max-w-3xl">
+                <p className="text-sm text-[#C8D0CC] leading-relaxed mb-6 max-w-3xl">
                   {m.description}
                 </p>
 
                 <div className="pt-4 border-t border-[#2A2D2C]/60">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#9AA19E] mb-2.5">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#A6B2AC] mb-2.5 font-medium">
                     Core Deliverables
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                     {m.deliverables.map((item) => (
                       <div
                         key={item}
-                        className="text-xs font-mono text-[#F1EFE8]/80 bg-[#181B1A]/80 border border-[#2A2D2C] px-3 py-2 rounded-lg flex items-center gap-2"
+                        className="text-xs font-mono text-[#FAF8F5] bg-[#181B1A] border border-[#2A2D2C] px-3 py-2 rounded-lg flex items-center gap-2"
                       >
-                        <span className="w-1 h-1 rounded-full bg-[#C87D55] shrink-0" />
+                        <span className="w-1 h-1 rounded-full bg-[#E58B4E] shrink-0" />
                         <span className="truncate">{item}</span>
                       </div>
                     ))}

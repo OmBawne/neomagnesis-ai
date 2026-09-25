@@ -67,7 +67,7 @@ export default function WhyNeomagnesis() {
           <p className="text-sm text-[#9AA19E] leading-relaxed mb-4">
             To create an operating system where humans define strategic outcomes, and autonomous agents navigate the logistical complexity required to achieve them.
           </p>
-          <p className="text-xs text-[#626A66] leading-relaxed font-mono">
+          <p className="text-xs text-[#8E9A94] leading-relaxed font-mono">
             // Building the infrastructure for the next generation of autonomous digital enterprises.
           </p>
         </motion.div>
@@ -88,7 +88,7 @@ export default function WhyNeomagnesis() {
           <p className="text-sm text-[#9AA19E] leading-relaxed mb-4">
             To eliminate repetitive, mundane digital tasks with intelligent, self-correcting workflows—enabling operators and builders to focus entirely on creative vision.
           </p>
-          <p className="text-xs text-[#626A66] leading-relaxed font-mono">
+          <p className="text-xs text-[#8E9A94] leading-relaxed font-mono">
             // High-throughput, low-latency execution with cryptographic auditability.
           </p>
         </motion.div>

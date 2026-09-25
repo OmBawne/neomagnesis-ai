@@ -26,7 +26,7 @@ export function CursorLight() {
     }
 
     const animate = () => {
-      const lag = 0.08
+      const lag = 0.05
       current.current.x += (pos.current.x - current.current.x) * lag
       current.current.y += (pos.current.y - current.current.y) * lag
 

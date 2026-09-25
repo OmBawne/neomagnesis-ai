@@ -1,198 +1,226 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
 import { Logo } from '@/components/shared/Logo'
+import { Menu, X, ArrowUpRight, ShieldCheck, Sparkles } from 'lucide-react'
+import { EarlyAccessModal } from '@/components/ui/EarlyAccessModal'
 
-const dockItems = [
-  { label: 'Home',          href: '#hero' },
-  { label: 'Philosophy',    href: '#philosophy' },
-  { label: 'Local-First',   href: '#why-local-first' },
-  { label: 'Workflows',     href: '#workflows' },
-  { label: 'Use Cases',     href: '#use-cases' },
-  { label: 'Roadmap',       href: '#roadmap' },
+interface DockProps {
+  onOpenEarlyAccess?: () => void
+}
+
+const navItems = [
+  { label: 'Home', href: '#hero' },
+  { label: 'Philosophy', href: '#philosophy' },
+  { label: 'Architecture', href: '#why-local-first' },
+  { label: 'Workflows', href: '#workflows' },
+  { label: 'Updates', href: '#roadmap' },
+  { label: 'Security', href: '/legal#security' },
 ]
 
-const CTA_ITEM = { label: 'Early Access', href: '#early-access' }
-
-export default function Dock() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+export function Dock({ onOpenEarlyAccess }: DockProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const getScale = (index: number) => {
-    if (hoveredIndex === null) return 1
-    const diff = Math.abs(index - hoveredIndex)
-    if (diff === 0) return 1.14
-    if (diff === 1) return 1.06
-    return 1
+  const handleOpenEarlyAccess = () => {
+    setMobileMenuOpen(false)
+    if (onOpenEarlyAccess) {
+      onOpenEarlyAccess()
+    } else {
+      setModalOpen(true)
+    }
   }
-
-  if (!mounted) return null
 
   return (
     <>
-      {/* ── Desktop Dock ──────────────────────────────────── */}
-      <motion.nav
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block"
-        role="navigation"
-        aria-label="Main navigation"
+      <EarlyAccessModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {/* Desktop Centered Floating Dock */}
+      <motion.header
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none px-4"
+        role="banner"
       >
-        <div className="dock-glass flex items-center gap-1 px-4 py-2.5">
-          {/* Logo mark */}
-          <div className="mr-2 pr-3 border-r border-white/[0.07]">
-            <Logo variant="icon" height={22} href="/" />
-          </div>
-
-          {/* Nav items */}
-          {dockItems.map((item, index) => (
-            <div
-              key={item.label}
-              className="relative group"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {/* Tooltip */}
-              <AnimatePresence>
-                {hoveredIndex === index && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 4 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 rounded-md text-[10px] font-medium text-[#F1EFE8] pointer-events-none"
-                    style={{
-                      background: 'rgba(24, 27, 26, 0.95)',
-                      border: '1px solid rgba(42,45,44,0.8)',
-                    }}
-                  >
-                    {item.label}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <motion.a
-                href={item.href}
-                animate={{ scale: getScale(index) }}
-                transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-                className="flex items-center px-3 py-1.5 rounded-xl text-[13px] font-medium text-[#9AA19E] hover:text-[#F1EFE8] transition-colors duration-150 cursor-pointer"
-                style={{ transformOrigin: 'bottom center' }}
-              >
-                {item.label}
-              </motion.a>
-            </div>
-          ))}
-
-          {/* Divider */}
-          <div className="mx-1 w-px h-4 bg-white/[0.07]" />
-
-          {/* Early Access CTA */}
-          <motion.a
-            href={CTA_ITEM.href}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-            className="ml-1 px-3.5 py-1.5 rounded-xl text-[13px] font-semibold cursor-pointer"
-            style={{
-              background: 'rgba(184, 115, 51, 0.15)',
-              color: '#D4883B',
-              border: '1px solid rgba(184, 115, 51, 0.3)',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            Early Access
-          </motion.a>
-        </div>
-      </motion.nav>
-
-      {/* ── Mobile Header ─────────────────────────────────── */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 md:hidden flex items-center justify-between px-5 h-14"
-        style={{
-          background: 'rgba(8, 9, 9, 0.85)',
-          backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(42, 45, 44, 0.6)',
-        }}
-      >
-        <Logo variant="full" height={26} href="/" />
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-[#9AA19E] hover:text-[#F1EFE8] p-1.5 transition-colors"
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileOpen}
+        <nav
+          role="navigation"
+          aria-label="Main Navigation"
+          className="pointer-events-auto relative flex items-center gap-1.5 px-3.5 py-2 rounded-full transition-all duration-300"
+          style={{
+            background: scrolled
+              ? 'rgba(12, 14, 15, 0.82)'
+              : 'rgba(15, 17, 18, 0.72)',
+            backdropFilter: 'blur(20px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(160%)',
+            border: '1px solid rgba(241, 239, 232, 0.09)',
+            boxShadow: scrolled
+              ? '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.04) inset'
+              : '0 12px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03) inset',
+          }}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            {mobileOpen ? (
-              <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                <X size={20} />
-              </motion.div>
-            ) : (
-              <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                <Menu size={20} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </button>
-      </motion.div>
-
-      {/* ── Mobile Menu Overlay ────────────────────────────── */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            key="mobile-menu"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-40 md:hidden pt-14 px-5 pb-8 flex flex-col gap-2"
+          {/* Subtle Top Specular Glass Reflection */}
+          <div
+            className="absolute top-0 left-6 right-6 h-px pointer-events-none"
             style={{
-              background: 'rgba(8, 9, 9, 0.97)',
-              backdropFilter: 'blur(24px)',
+              background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%)',
             }}
+            aria-hidden="true"
+          />
+
+          {/* Official Logo Brand Mark */}
+          <a
+            href="#hero"
+            className="flex items-center pl-2 pr-3 py-1 group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C87D55] rounded-full"
+            aria-label="Neomagnesis AI — Return to Hero"
           >
-            <div className="flex-1 flex flex-col gap-1 pt-8">
-              {dockItems.map((item, i) => (
-                <motion.a
+            <Logo variant="icon" height={24} />
+          </a>
+
+          {/* Subtle Hairline Divider */}
+          <div className="w-px h-4 mx-1 bg-white/[0.08]" aria-hidden="true" />
+
+          {/* Nav Links */}
+          <div className="flex items-center gap-0.5">
+            {navItems.map((item, idx) => {
+              const isExternal = item.href.startsWith('/')
+              return (
+                <a
                   key={item.label}
                   href={item.href}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-between py-3.5 px-4 rounded-xl text-base font-medium text-[#9AA19E] hover:text-[#F1EFE8] hover:bg-white/[0.03] transition-colors"
-                  style={{ borderBottom: '1px solid rgba(42,45,44,0.4)' }}
+                  onMouseEnter={() => setHoveredIdx(idx)}
+                  onMouseLeave={() => setHoveredIdx(null)}
+                  className="relative px-3.5 py-1.5 rounded-full text-xs font-medium text-[#C8D0CC] hover:text-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#C87D55]"
                 >
+                  {hoveredIdx === idx && (
+                    <motion.div
+                      layoutId="dockHover"
+                      className="absolute inset-0 rounded-full bg-white/[0.06] -z-10"
+                      transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+                    />
+                  )}
                   <span>{item.label}</span>
-                  <span className="text-[#2A2D2C] text-sm">→</span>
-                </motion.a>
-              ))}
-            </div>
+                </a>
+              )
+            })}
+          </div>
 
-            <motion.a
-              href={CTA_ITEM.href}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => setMobileOpen(false)}
-              className="btn-copper w-full justify-center text-base py-4 mt-4"
+          {/* Hairline Divider */}
+          <div className="w-px h-4 mx-1 bg-white/[0.08]" aria-hidden="true" />
+
+          {/* Primary Action Button: Early Access Modal */}
+          <button
+            onClick={handleOpenEarlyAccess}
+            className="relative flex items-center gap-2 pl-3.5 pr-4 py-1.5 rounded-full text-xs font-medium text-[#08090A] transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C87D55]"
+            style={{
+              background: '#F1EFE8',
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C87D55] animate-pulse" aria-hidden="true" />
+            <span className="font-semibold tracking-tight">Early Access</span>
+          </button>
+        </nav>
+      </motion.header>
+
+      {/* Mobile Compact Navigation Bar */}
+      <div className="fixed top-4 left-4 right-4 z-50 md:hidden">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-between px-4 py-2.5 rounded-2xl"
+          style={{
+            background: 'rgba(12, 14, 15, 0.88)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(241, 239, 232, 0.09)',
+            boxShadow: '0 12px 30px -10px rgba(0, 0, 0, 0.6)',
+          }}
+        >
+          <a href="#hero" className="flex items-center gap-2">
+            <Logo variant="icon" height={22} />
+            <span className="font-medium text-xs tracking-wider text-[#F1EFE8] font-sans">
+              NEOMAGNESIS
+            </span>
+          </a>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleOpenEarlyAccess}
+              className="px-3 py-1 rounded-full text-[11px] font-semibold bg-[#F1EFE8] text-[#08090A] cursor-pointer"
             >
-              Join Early Access
-            </motion.a>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              Early Access
+            </button>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1.5 rounded-lg text-[#9AA19E] hover:text-[#F1EFE8] hover:bg-white/[0.05] transition-colors cursor-pointer"
+              aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Mobile Navigation Drawer */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              key="mobile-drawer"
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-2 p-4 rounded-2xl overflow-hidden"
+              style={{
+                background: 'rgba(15, 17, 18, 0.96)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                border: '1px solid rgba(241, 239, 232, 0.08)',
+                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.7)',
+              }}
+            >
+              <div className="flex flex-col gap-1">
+                {navItems.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-[#E2E8E5] hover:text-white hover:bg-white/[0.08] transition-colors"
+                  >
+                    <span>{item.label}</span>
+                    <span className="text-[#A6B2AC] text-xs">→</span>
+                  </a>
+                ))}
+
+                <div className="pt-2 mt-1 border-t border-white/[0.06]">
+                  <button
+                    onClick={handleOpenEarlyAccess}
+                    className="w-full py-3 rounded-xl text-xs font-mono uppercase tracking-widest font-semibold bg-[#C87D55] text-[#08090A] flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Sparkles size={13} />
+                    <span>Join Early Access</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </>
   )
 }
+
+export default Dock

@@ -77,7 +77,7 @@ export default function Community() {
                 <div className="text-xs font-sans text-[#F1EFE8]">Deep dives on agentic loops, state persistence, and deterministic orchestration.</div>
               </div>
             </div>
-            <div className="pt-2 text-[11px] text-[#626A66]">
+            <div className="pt-2 text-[11px] text-[#8E9A94]">
               // Open to all creators, engineers, and automation architects.
             </div>
           </div>

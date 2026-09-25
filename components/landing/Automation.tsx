@@ -103,7 +103,7 @@ export default function Automation() {
           <div className="lg:col-span-8 p-6 sm:p-10 bg-[#080909] flex flex-col justify-center">
             <div className="text-xs font-mono text-[#9AA19E] mb-6 flex items-center justify-between">
               <span>Interactive Pipeline Graph</span>
-              <span className="text-[11px] text-[#626A66]">Select any node to inspect payload</span>
+              <span className="text-[11px] text-[#8E9A94]">Select any node to inspect payload</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
@@ -130,7 +130,7 @@ export default function Automation() {
                             ? 'text-[#5BA87E] bg-[#3D6B52]/15 border-[#3D6B52]/30'
                             : node.status === 'active'
                             ? 'text-[#D4883B] bg-[#B87333]/15 border-[#B87333]/30'
-                            : 'text-[#626A66] bg-[#181B1A] border-[#2A2D2C]'
+                            : 'text-[#A6B2AC] bg-[#181B1A] border-[#2A2D2C]'
                         }`}
                       >
                         {node.status}

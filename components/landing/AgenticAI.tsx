@@ -63,7 +63,7 @@ export default function AgenticAI() {
                       <div className="text-xs font-mono text-[#F1EFE8]">{item.label}</div>
                       <div className="text-[11px] text-[#9AA19E] mt-0.5">{item.desc}</div>
                     </div>
-                    <span className="text-[10px] font-mono text-[#626A66]">0{idx + 1}</span>
+                    <span className="text-[10px] font-mono text-[#8E9A94]">0{idx + 1}</span>
                   </div>
                   {idx < traditionalSteps.length - 1 && (
                     <div className="h-4 w-px bg-[#2A2D2C] mx-auto my-1" />
@@ -110,7 +110,7 @@ export default function AgenticAI() {
                   className="bg-[#181B1A] border border-[#2A2D2C] rounded-xl p-4.5 flex flex-col justify-between hover:border-[#B87333]/40 transition-colors duration-200 group"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-mono text-[#626A66] group-hover:text-[#B87333] transition-colors">{item.step}</span>
+                    <span className="text-[11px] font-mono text-[#8E9A94] group-hover:text-[#E58B4E] transition-colors">{item.step}</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-[#2A2D2C] group-hover:bg-[#B87333] transition-colors" />
                   </div>
                   <div>

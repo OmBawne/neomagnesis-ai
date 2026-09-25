@@ -16,14 +16,14 @@ export default function FinalCTA() {
         transition={{ duration: 0.6 }}
         className="max-w-3xl mx-auto"
       >
-        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#9AA19E] mb-4 block">
+        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#A6B2AC] mb-4 block font-medium">
           // Deployment
         </span>
-        <h2 className="text-3xl sm:text-4xl lg:text-6xl font-light text-[#F1EFE8] tracking-[-0.03em] leading-[1.08] mb-6">
+        <h2 className="text-3xl sm:text-4xl lg:text-6xl font-light text-[#FAF8F5] tracking-[-0.03em] leading-[1.08] mb-6">
           Ready to build with <br />
-          <span className="font-normal text-[#F1EFE8]">sovereign intelligence</span>?
+          <span className="font-normal text-[#FAF8F5]">sovereign intelligence</span>?
         </h2>
-        <p className="text-base sm:text-lg text-[#9AA19E] leading-relaxed font-normal mb-10 max-w-xl mx-auto">
+        <p className="text-base sm:text-lg text-[#C8D0CC] leading-relaxed font-normal mb-10 max-w-xl mx-auto">
           Start deploying autonomous workflows today. Connect your platforms, configure high-level goals, and let Neomagnesis handle execution.
         </p>
 
@@ -33,7 +33,7 @@ export default function FinalCTA() {
             className="btn-primary px-8 py-3.5 text-sm w-full sm:w-auto justify-center"
           >
             Get Started Free
-            <ArrowRight size={14} className="text-[#9AA19E]" />
+            <ArrowRight size={14} className="text-[#A6B2AC]" />
           </button>
           <a
             href="https://discord.gg/neomagnesis"
@@ -46,7 +46,7 @@ export default function FinalCTA() {
           </a>
         </div>
 
-        <div className="mt-12 text-xs font-mono text-[#626A66]">
+        <div className="mt-12 text-xs font-mono text-[#A6B2AC]">
           Zero lock-in · Native webhook support · End-to-end data encryption
         </div>
       </motion.div>

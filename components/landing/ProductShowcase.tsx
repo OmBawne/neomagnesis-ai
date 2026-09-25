@@ -112,7 +112,7 @@ export default function ProductShowcase() {
                   <div className="p-3.5 rounded-lg bg-[#080909] border border-[#2A2D2C] opacity-60">
                     <div className="text-[#9AA19E] mb-1">Step 3 — Omnichannel Dispatch</div>
                     <div className="text-[#9AA19E]">Format Discord embed &amp; trigger CRM workflow</div>
-                    <div className="text-[#626A66] mt-2 text-[10px]">Queued</div>
+                    <div className="text-[#8E9A94] mt-2 text-[10px]">Queued</div>
                   </div>
                 </div>
               </div>
@@ -123,11 +123,11 @@ export default function ProductShowcase() {
             <div className="space-y-4">
               <div className="text-[#9AA19E] text-[11px] uppercase tracking-wider">// Telemetry Stream</div>
               <div className="bg-[#080909] p-4 rounded-xl border border-[#2A2D2C] space-y-2 text-[#F1EFE8]">
-                <div><span className="text-[#626A66]">[14:02:11.204]</span> <span className="text-[#9AA19E]">INGEST:</span> Webhook event payload received (size: 2.4kb)</div>
-                <div><span className="text-[#626A66]">[14:02:11.238]</span> <span className="text-[#9AA19E]">VALIDATE:</span> Schema adherence 100% matched</div>
-                <div><span className="text-[#626A66]">[14:02:11.290]</span> <span className="text-[#9AA19E]">DISPATCH:</span> YouTube API v3 connection authenticated</div>
-                <div><span className="text-[#626A66]">[14:02:11.382]</span> <span className="text-[#D4883B]">AI_REASON:</span> Prompt tokens: 420 | Output tokens: 165 | Latency: 92ms</div>
-                <div className="text-[#5BA87E]"><span className="text-[#626A66]">[14:02:11.450]</span> SUCCESS: Discord webhook delivered with status 204 No Content</div>
+                <div><span className="text-[#8E9A94]">[14:02:11.204]</span> <span className="text-[#9AA19E]">INGEST:</span> Webhook event payload received (size: 2.4kb)</div>
+                <div><span className="text-[#8E9A94]">[14:02:11.238]</span> <span className="text-[#9AA19E]">VALIDATE:</span> Schema adherence 100% matched</div>
+                <div><span className="text-[#8E9A94]">[14:02:11.290]</span> <span className="text-[#9AA19E]">DISPATCH:</span> YouTube API v3 connection authenticated</div>
+                <div><span className="text-[#8E9A94]">[14:02:11.382]</span> <span className="text-[#D4883B]">AI_REASON:</span> Prompt tokens: 420 | Output tokens: 165 | Latency: 92ms</div>
+                <div className="text-[#5BA87E]"><span className="text-[#8E9A94]">[14:02:11.450]</span> SUCCESS: Discord webhook delivered with status 204 No Content</div>
               </div>
             </div>
           )}

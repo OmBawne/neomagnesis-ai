@@ -4,42 +4,38 @@ import PhilosophySection from '@/components/landing/PhilosophySection'
 import WhyLocalFirst from '@/components/landing/WhyLocalFirst'
 import { WorkflowVision } from '@/components/landing/WorkflowVision'
 import { UseCases } from '@/components/landing/UseCases'
-import { PricingSection } from '@/components/landing/PricingSection'
 import { RoadmapSection } from '@/components/landing/RoadmapSection'
 import { EarlyAccessSection } from '@/components/landing/EarlyAccessSection'
 import { Footer } from '@/components/landing/Footer'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#080909] text-[#F1EFE8] selection:bg-[#F1EFE8] selection:text-[#080909] overflow-x-hidden relative">
-      {/* Floating macOS-inspired Dock navigation */}
+    <main className="min-h-screen bg-[#08090A] text-[#FAF8F5] selection:bg-[#FAF8F5] selection:text-[#08090A] overflow-x-hidden relative">
+      {/* Centered Floating Dock Navigation */}
       <Dock />
 
-      {/* 3D Living Core Hero */}
+      {/* 3D Agentic System Core Hero */}
       <Hero />
 
-      {/* Philosophy Section */}
+      {/* Architectural Philosophy */}
       <PhilosophySection />
 
-      {/* Why Local-First (Blueprint SVG Diagrams) */}
+      {/* Why Local-First & Sovereign Hardware */}
       <WhyLocalFirst />
 
-      {/* Workflow Vision (Abstract Node Graphs) */}
+      {/* Agentic Workflow Vision */}
       <WorkflowVision />
 
-      {/* Applied Use Cases (Zero Fake Metrics) */}
+      {/* Applied Technical Use Cases (Zero Speculation) */}
       <UseCases />
 
-      {/* Access & Membership (Honest Early Access Program) */}
-      <PricingSection />
-
-      {/* Public Architectural Roadmap (Dateless Milestones) */}
+      {/* Verified Architectural Milestones */}
       <RoadmapSection />
 
-      {/* Priority Early Access Registration (Launch Pass) */}
+      {/* Priority Early Access Registration & Launch Pass */}
       <EarlyAccessSection />
 
-      {/* Global Footer */}
+      {/* Global Brand Footer */}
       <Footer />
     </main>
   )

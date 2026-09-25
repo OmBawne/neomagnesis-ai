@@ -3,174 +3,158 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { ArrowRight, ChevronDown } from 'lucide-react'
+import { ArrowRight, ChevronDown, Shield, Cpu, Network } from 'lucide-react'
+import { EarlyAccessModal } from '@/components/ui/EarlyAccessModal'
 
-// Lazy-load the 3D canvas — client-only, zero SSR cost
 const HeroCanvas = dynamic(
-  () => import('./hero/HeroCanvas').then(m => m.HeroCanvas),
+  () => import('./hero/HeroCanvas').then((m) => m.HeroCanvas),
   { ssr: false, loading: () => null }
 )
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.14, delayChildren: 0.3 } },
-}
-
 const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 }
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  show:   { opacity: 1, transition: { duration: 0.7, ease: 'easeOut' } },
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
 }
 
 export default function Hero() {
+  const [modalOpen, setModalOpen] = useState(false)
   const [canvasReady, setCanvasReady] = useState(false)
 
   useEffect(() => {
-    // Small delay so canvas has time to initialize before fading in
-    const t = setTimeout(() => setCanvasReady(true), 200)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setCanvasReady(true), 300)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#080909]"
-      aria-label="Hero section"
-    >
-      {/* ── 3D Living Core Canvas ─────────────────────────────── */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: canvasReady ? 1 : 0 }}
-        transition={{ duration: 1.2, ease: 'easeOut' }}
-        aria-hidden="true"
+    <>
+      <EarlyAccessModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
+      <section
+        id="hero"
+        className="relative min-h-[92vh] sm:min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#08090A] pt-24 pb-20"
+        aria-label="Hero section"
       >
-        <HeroCanvas />
-      </motion.div>
-
-      {/* ── Gradient vignette for readability ─────────────────── */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[1] pointer-events-none"
-        style={{
-          background: [
-            'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(8,9,9,0.5) 100%)',
-            'linear-gradient(180deg, rgba(8,9,9,0.55) 0%, transparent 30%, transparent 65%, rgba(8,9,9,0.9) 100%)',
-          ].join(', '),
-        }}
-      />
-
-      {/* ── Hero Text Content ──────────────────────────────────── */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="relative z-10 max-w-5xl mx-auto px-5 sm:px-8 text-center pt-32 pb-32"
-      >
-        {/* Eyebrow pill */}
-        <motion.div variants={fadeUp} className="flex justify-center mb-10">
-          <span
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-[0.18em] uppercase"
-            style={{
-              background: 'rgba(24,27,26,0.8)',
-              border: '1px solid rgba(42,45,44,0.9)',
-              color: '#9AA19E',
-              backdropFilter: 'blur(8px)',
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: '#B87333', boxShadow: '0 0 6px rgba(184,115,51,0.6)' }}
-            />
-            Early Access — Now Open
-          </span>
-        </motion.div>
-
-        {/* Main headline */}
-        <motion.h1
-          variants={fadeUp}
-          className="font-light tracking-[-0.04em] leading-[0.95] text-[#F1EFE8] mb-8"
-          style={{ fontSize: 'clamp(3.5rem, 9vw, 7rem)' }}
-        >
-          Neomagnesis
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          variants={fadeUp}
-          className="text-lg sm:text-xl leading-relaxed font-light max-w-xl mx-auto mb-12"
-          style={{ color: '#9AA19E', letterSpacing: '-0.01em' }}
-        >
-          The Local-First Agentic AI Operating System.
-        </motion.p>
-
-        {/* CTA Buttons */}
+        {/* 3D Agentic Intelligence Visual */}
         <motion.div
-          variants={fadeUp}
-          className="flex flex-col sm:flex-row gap-3.5 justify-center items-center"
+          className="absolute inset-0 z-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: canvasReady ? 1 : 0 }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
+          aria-hidden="true"
         >
-          <motion.a
-            href="#early-access"
-            className="btn-copper px-8 py-3.5 text-sm font-semibold"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-          >
-            Join Early Access
-            <ArrowRight size={15} />
-          </motion.a>
-          <motion.a
-            href="#philosophy"
-            className="btn-ghost px-8 py-3.5 text-sm"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 24 }}
-          >
-            Explore the Vision
-          </motion.a>
+          <HeroCanvas />
         </motion.div>
 
-        {/* Subtle spec line */}
+        {/* Restrained Radial Lighting Vignette */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            background: [
+              'radial-gradient(circle at 50% 45%, rgba(200, 125, 85, 0.04) 0%, transparent 60%)',
+              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, rgba(8, 9, 10, 0.75) 100%)',
+              'linear-gradient(180deg, rgba(8, 9, 10, 0.5) 0%, transparent 30%, transparent 70%, rgba(8, 9, 10, 0.95) 100%)',
+            ].join(', '),
+          }}
+        />
+
+        {/* Hero Narrative Stack */}
         <motion.div
-          variants={fadeIn}
-          className="flex items-center justify-center gap-4 mt-16 text-[11px] font-mono tracking-[0.14em] uppercase"
-          style={{ color: '#626A66' }}
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          className="relative z-10 max-w-[880px] mx-auto px-5 sm:px-8 text-center"
         >
-          <span>Local-First</span>
-          <span className="w-px h-3 bg-[#2A2D2C]" />
-          <span>Privacy by Design</span>
-          <span className="w-px h-3 bg-[#2A2D2C]" />
-          <span>Agentic Workflows</span>
-        </motion.div>
-      </motion.div>
+          {/* Primary Brand Headline */}
+          <motion.h1
+            variants={fadeUp}
+            className="font-light tracking-[-0.04em] text-[#FAF8F5] leading-[0.95] mb-5 select-none"
+            style={{ fontSize: 'clamp(3.2rem, 9vw, 6.5rem)' }}
+          >
+            Neomagnesis AI
+          </motion.h1>
 
-      {/* ── Scroll indicator ──────────────────────────────────── */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 0.8 }}
-        aria-hidden="true"
-      >
-        <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#626A66]">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          {/* Defining Subtitle */}
+          <motion.h2
+            variants={fadeUp}
+            className="text-lg sm:text-2xl lg:text-3xl font-light tracking-[-0.02em] text-[#FAF8F5] max-w-2xl mx-auto mb-6"
+          >
+            A Local-First Agentic AI Operating System
+          </motion.h2>
+
+          {/* Contextual Description */}
+          <motion.p
+            variants={fadeUp}
+            className="text-sm sm:text-base leading-relaxed text-[#C4CCC8] max-w-xl mx-auto mb-10 font-normal"
+          >
+            Autonomous intelligence executing entirely on your personal silicon.
+            Zero cloud telemetry, air-gapped security, and deterministic agent orchestration.
+          </motion.p>
+
+          {/* Action CTAs */}
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <button
+              onClick={() => setModalOpen(true)}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-xs font-mono uppercase tracking-widest font-semibold bg-[#FAF8F5] text-[#08090A] hover:bg-white hover:shadow-[0_0_30px_rgba(241,239,232,0.3)] transition-all duration-200 cursor-pointer"
+            >
+              <span>Join Early Access</span>
+              <ArrowRight size={14} />
+            </button>
+
+            <a
+              href="#philosophy"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-xs font-mono uppercase tracking-widest text-[#E6EAE7] hover:text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.18] transition-all duration-200"
+            >
+              <span>Architectural Vision</span>
+            </a>
+          </motion.div>
+
+          {/* System Guarantees Monospace Triad with protective subtle glass backdrop */}
+          <motion.div variants={fadeUp} className="flex justify-center mt-16">
+            <div
+              className="inline-flex flex-wrap items-center justify-center gap-5 sm:gap-8 px-6 py-2.5 rounded-full text-[11px] font-mono tracking-[0.16em] uppercase text-[#C4CCC8]"
+              style={{
+                background: 'rgba(15, 18, 19, 0.88)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(241, 239, 232, 0.12)',
+                boxShadow: '0 8px 24px -6px rgba(0, 0, 0, 0.6)',
+              }}
+            >
+              <div className="flex items-center gap-2">
+                <Cpu size={13} className="text-[#E58B4E]" aria-hidden="true" />
+                <span className="text-[#D4DDD8] font-medium">Local Execution</span>
+              </div>
+              <span className="w-1 h-1 rounded-full bg-white/20" aria-hidden="true" />
+              <div className="flex items-center gap-2">
+                <Shield size={13} className="text-[#64B889]" aria-hidden="true" />
+                <span className="text-[#D4DDD8] font-medium">Hardware Sovereignty</span>
+              </div>
+              <span className="w-1 h-1 rounded-full bg-white/20" aria-hidden="true" />
+              <div className="flex items-center gap-2">
+                <Network size={13} className="text-[#E58B4E]" aria-hidden="true" />
+                <span className="text-[#D4DDD8] font-medium">Inter-Agent Mesh</span>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity pointer-events-none"
+          aria-hidden="true"
         >
-          <ChevronDown size={14} className="text-[#626A66]" />
-        </motion.div>
-      </motion.div>
-
-      {/* ── Bottom ground gradient ─────────────────────────────── */}
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 h-40 z-[2] pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, transparent, #080909)' }}
-      />
-    </section>
+          <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-[#A6B2AC]">Scroll</span>
+          <ChevronDown size={14} className="text-[#A6B2AC] animate-bounce" />
+        </div>
+      </section>
+    </>
   )
 }
