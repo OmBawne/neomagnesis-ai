@@ -76,20 +76,20 @@ function UseCaseCard({ uc, idx }: { uc: typeof useCases[0]; idx: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className="surface-card p-7 sm:p-9 flex flex-col justify-between group hover:border-[#C87D55]/40 transition-colors duration-300"
+      className="surface-card rounded-2xl p-7 sm:p-9 flex flex-col justify-between border border-[#2A2D2C] hover:border-[#E58B4E]/40 hover:-translate-y-1 transition-all duration-300 shadow-[0_12px_36px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.6)] group h-full"
     >
       <div>
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-lg bg-[#181B1A] border border-[#2A2D2C] flex items-center justify-center text-[#C87D55]">
-              <Icon size={16} />
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-[#181B1A] border border-[#2A2D2C] flex items-center justify-center text-[#FFAE70] group-hover:border-[#E58B4E]/40 transition-colors">
+              <Icon size={18} />
             </div>
             <div>
-              <span className="text-xs font-medium text-[#FAF8F5] block">{uc.audience}</span>
-              <span className="text-[10px] font-mono text-[#A6B2AC] uppercase tracking-wider">{uc.tag}</span>
+              <span className="text-sm font-semibold text-[#FAF8F5] block">{uc.audience}</span>
+              <span className="text-[10px] font-mono text-[#D4DDD8] uppercase tracking-wider font-medium">{uc.tag}</span>
             </div>
           </div>
-          <span className="text-[10px] font-mono text-[#A6B2AC] px-2.5 py-1 rounded border border-[#2A2D2C] bg-[#181B1A]">
+          <span className="text-[10px] font-mono text-[#FAF8F5] px-3 py-1 rounded-full border border-[#2A2D2C] bg-[#181B1A] font-medium">
             {uc.highlight}
           </span>
         </div>
@@ -97,23 +97,23 @@ function UseCaseCard({ uc, idx }: { uc: typeof useCases[0]; idx: number }) {
         <h3 className="text-xl sm:text-2xl font-light text-[#FAF8F5] mb-3 leading-snug group-hover:text-white transition-colors">
           {uc.title}
         </h3>
-        <p className="text-sm text-[#C8D0CC] leading-relaxed mb-6">
+        <p className="text-sm sm:text-base text-[#D4DDD8] leading-relaxed mb-6 font-normal">
           {uc.description}
         </p>
 
-        <div className="space-y-2 pt-4 border-t border-[#2A2D2C]/70">
+        <div className="space-y-2.5 pt-5 border-t border-[#2A2D2C]/80">
           {uc.points.map((pt) => (
-            <div key={pt} className="flex items-center gap-2 text-xs text-[#C8D0CC]">
-              <div className="w-1 h-1 rounded-full bg-[#E58B4E]" />
+            <div key={pt} className="flex items-center gap-2.5 text-xs sm:text-sm text-[#FAF8F5]">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" />
               <span>{pt}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-8 pt-5 border-t border-[#2A2D2C]/70 flex items-center justify-between text-xs font-mono text-[#A6B2AC]">
+      <div className="mt-8 pt-5 border-t border-[#2A2D2C]/80 flex items-center justify-between text-xs font-mono text-[#D4DDD8]">
         <span>Architecture Target</span>
-        <span className="text-[#FAF8F5] font-medium">Local Agent Runtime</span>
+        <span className="text-[#FAF8F5] font-semibold">Local Agent Runtime</span>
       </div>
     </motion.div>
   )
@@ -121,23 +121,28 @@ function UseCaseCard({ uc, idx }: { uc: typeof useCases[0]; idx: number }) {
 
 export function UseCases() {
   return (
-    <section id="use-cases" className="relative py-16 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
+    <section id="use-cases" className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
       {/* Header */}
       <div className="max-w-3xl mb-14 lg:mb-18">
-        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#A6B2AC] mb-3 block font-medium">
-          // Applied Deployments
-        </span>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-6">
+        <div className="flex items-center gap-2.5 mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
+          <span className="mono-label text-[#FAF8F5] font-medium">
+            // Applied Deployments
+          </span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5">
           Architected for <br />
-          <span className="font-normal text-[#FAF8F5]">high-leverage practitioners</span>.
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
+            high-leverage practitioners
+          </span>.
         </h2>
-        <p className="text-base sm:text-lg text-[#C8D0CC] leading-relaxed font-normal">
+        <p className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal">
           Neomagnesis is designed for individuals and teams who require uncompromising privacy,
           predictable execution, and deep local system leverage.
         </p>
       </div>
 
-      {/* 4 Asymmetric Cards */}
+      {/* 4 Standardized Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {useCases.map((uc, idx) => (
           <UseCaseCard key={uc.id} uc={uc} idx={idx} />

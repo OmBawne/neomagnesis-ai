@@ -1,27 +1,73 @@
 'use client'
 
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
-const statements = [
+interface PhilosophyStatement {
+  id: string
+  num: string
+  title: React.ReactNode
+  sub: React.ReactNode
+}
+
+const statements: PhilosophyStatement[] = [
   {
     id: 'stmt-1',
-    text: 'Intelligence should feel invisible.',
-    sub: 'The most powerful tools disappear into the work. You should feel in command — never managed by the machine.',
+    num: '01',
+    title: (
+      <>
+        Intelligence should feel{' '}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal underline decoration-[#E58B4E]/30 underline-offset-8">
+          invisible.
+        </span>
+      </>
+    ),
+    sub: (
+      <>
+        The most powerful tools disappear into the work. You should feel{' '}
+        <span className="text-[#FAF8F5] font-medium">in command</span> — never managed by the machine.
+      </>
+    ),
   },
   {
     id: 'stmt-2',
-    text: 'Sovereignty is not a feature. It is the foundation.',
-    sub: 'Your data lives where you decide. Your models run where you choose. Ownership is not optional.',
+    num: '02',
+    title: (
+      <>
+        Sovereignty is not a feature.{' '}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
+          It is the foundation.
+        </span>
+      </>
+    ),
+    sub: (
+      <>
+        Your data lives where you decide. Your models run where you choose.{' '}
+        <span className="text-[#FAF8F5] font-medium">Ownership is not optional.</span>
+      </>
+    ),
   },
   {
     id: 'stmt-3',
-    text: 'The best workflow is the one you never have to manage.',
-    sub: 'Agents should reason, adapt, and execute. Your attention belongs to what only you can do.',
+    num: '03',
+    title: (
+      <>
+        The best workflow is the one you{' '}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
+          never have to manage.
+        </span>
+      </>
+    ),
+    sub: (
+      <>
+        Agents should reason, adapt, and execute. Your attention belongs to{' '}
+        <span className="text-[#FAF8F5] font-medium">what only you can do.</span>
+      </>
+    ),
   },
 ]
 
-function Statement({ statement, index }: { statement: typeof statements[0]; index: number }) {
+function Statement({ statement, index }: { statement: PhilosophyStatement; index: number }) {
   return (
     <motion.div
       key={statement.id}
@@ -29,29 +75,29 @@ function Statement({ statement, index }: { statement: typeof statements[0]; inde
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-8%' }}
       transition={{ duration: 0.85, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start py-16 lg:py-20"
+      className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start py-16 lg:py-20 group"
       style={{ borderTop: index > 0 ? '1px solid #2A2D2C' : undefined }}
     >
-      {/* Statement number */}
+      {/* Statement number badge */}
       <div className="lg:col-span-1 flex items-start pt-2">
-        <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#A6B2AC] font-medium">
-          {String(index + 1).padStart(2, '0')}
+        <span className="font-mono text-xs tracking-[0.2em] uppercase text-[#FFAE70] font-semibold bg-[#E58B4E]/10 border border-[#E58B4E]/30 px-2.5 py-1 rounded-full">
+          {statement.num}
         </span>
       </div>
 
       {/* Main statement */}
       <div className="lg:col-span-7">
         <h3
-          className="font-light text-[#FAF8F5] leading-[1.05] tracking-[-0.03em]"
+          className="font-light text-[#FAF8F5] leading-[1.08] tracking-[-0.03em]"
           style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
         >
-          {statement.text}
+          {statement.title}
         </h3>
       </div>
 
       {/* Supporting copy */}
-      <div className="lg:col-span-4 flex items-start pt-1">
-        <p className="text-sm sm:text-base leading-relaxed text-[#C8D0CC] font-normal">
+      <div className="lg:col-span-4 flex items-start pt-1.5">
+        <p className="text-sm sm:text-base leading-relaxed text-[#D4DDD8] font-normal">
           {statement.sub}
         </p>
       </div>
@@ -73,7 +119,7 @@ export default function PhilosophySection() {
     <section
       id="philosophy"
       ref={sectionRef}
-      className="relative py-16 lg:py-24 px-5 sm:px-8"
+      className="relative py-20 lg:py-28 px-5 sm:px-8"
       style={{ borderTop: '1px solid #2A2D2C' }}
       aria-labelledby="philosophy-heading"
     >
@@ -81,14 +127,15 @@ export default function PhilosophySection() {
         {/* Overline */}
         <motion.div
           style={{ y: overlineY }}
-          className="mb-14 lg:mb-18"
+          className="mb-14 lg:mb-18 flex items-center gap-3"
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
           <motion.span
             initial={{ opacity: 0, x: -12 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="mono-label"
+            className="mono-label text-[#FAF8F5] font-medium"
           >
             // Core Philosophy
           </motion.span>
@@ -109,7 +156,7 @@ export default function PhilosophySection() {
           className="pt-12 lg:pt-16 flex items-center gap-6"
         >
           <div className="w-16 h-px bg-[#E58B4E] opacity-75" />
-          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#A6B2AC] font-medium">
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-[#FFAE70] font-semibold">
             Built differently
           </span>
         </motion.div>

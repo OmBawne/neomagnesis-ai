@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Check, Clock, Radio, ArrowUpRight } from 'lucide-react'
+import { Check, Radio } from 'lucide-react'
 
 interface Milestone {
   id: string
@@ -82,17 +82,22 @@ const milestones: Milestone[] = [
 
 export function RoadmapSection() {
   return (
-    <section id="roadmap" className="relative py-16 lg:py-24 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
+    <section id="roadmap" className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
       {/* Header */}
       <div className="max-w-3xl mb-14 lg:mb-18">
-        <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#A6B2AC] mb-3 block font-medium">
-          // Product Evolution
-        </span>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-6">
+        <div className="flex items-center gap-2.5 mb-4">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
+          <span className="mono-label text-[#FAF8F5] font-medium">
+            // Product Evolution
+          </span>
+        </div>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5">
           Architectural roadmap. <br />
-          <span className="font-normal text-[#FAF8F5]">Milestones without speculation.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
+            Milestones without speculation.
+          </span>
         </h2>
-        <p className="text-base sm:text-lg text-[#C8D0CC] leading-relaxed font-normal">
+        <p className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal">
           We do not publish artificial calendar deadlines. We advance through strict technical milestones,
           releasing each capability only when it satisfies our standards for privacy, stability, and craft.
         </p>
@@ -113,52 +118,52 @@ export function RoadmapSection() {
               transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="relative group"
             >
-              {/* Timeline Marker Node */}
+              {/* Timeline Marker Node (centered exactly on border-l: 24px/40px pl + 12px half + 1px border = 37px/53px) */}
               <div
-                className={`absolute -left-[31px] sm:-left-[47px] top-1.5 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                className={`absolute -left-[37px] sm:-left-[53px] top-1.5 w-6 h-6 rounded-full flex items-center justify-center border transition-all duration-300 ${
                   isInProgress
-                    ? 'bg-[#080909] border-[#E58B4E] shadow-[0_0_12px_rgba(229,139,78,0.4)]'
+                    ? 'bg-[#080909] border-[#E58B4E] shadow-[0_0_14px_rgba(229,139,78,0.5)]'
                     : isCompleted
                     ? 'bg-[#181B1A] border-[#7FA692] text-[#7FA692]'
                     : 'bg-[#111312] border-[#2A2D2C] text-[#A6B2AC]'
                 }`}
               >
                 {isInProgress ? (
-                  <span className="w-2 h-2 rounded-full bg-[#E58B4E] animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-[#FFAE70] animate-pulse" />
                 ) : isCompleted ? (
                   <Check size={12} className="text-[#7FA692]" />
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3A3E3C]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#484E4B]" />
                 )}
               </div>
 
               {/* Milestone Card */}
               <div
-                className={`rounded-2xl p-6 sm:p-8 border transition-all duration-300 ${
+                className={`surface-card rounded-2xl p-6 sm:p-8 border transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.4)] ${
                   isInProgress
-                    ? 'bg-[#121413] border-[#E58B4E]/50 shadow-[0_0_30px_rgba(229,139,78,0.06)]'
-                    : 'bg-[#111312] border-[#2A2D2C] hover:border-[#A6B2AC]/40'
+                    ? 'bg-[#131615] border-[#E58B4E]/60 shadow-[0_0_35px_rgba(229,139,78,0.08)]'
+                    : 'bg-[#111312] border-[#2A2D2C] hover:border-[#E58B4E]/40'
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono uppercase tracking-widest text-[#A6B2AC] font-medium">
+                    <span className="text-xs font-mono uppercase tracking-widest text-[#FAF8F5] font-semibold">
                       {m.phase}
                     </span>
                     <span
                       className={`text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full border ${
                         isInProgress
-                          ? 'bg-[#E58B4E]/15 border-[#E58B4E]/60 text-[#E58B4E] font-medium'
+                          ? 'bg-[#E58B4E]/20 border-[#E58B4E]/60 text-[#FFAE70] font-semibold'
                           : isCompleted
-                          ? 'bg-[#5B7065]/20 border-[#7FA692]/60 text-[#7FA692] font-medium'
-                          : 'bg-[#181B1A] border-[#2A2D2C] text-[#A6B2AC]'
+                          ? 'bg-[#5B7065]/20 border-[#7FA692]/60 text-[#7FA692] font-semibold'
+                          : 'bg-[#181B1A] border-[#2A2D2C] text-[#D4DDD8] font-medium'
                       }`}
                     >
                       {isInProgress ? 'In Progress' : isCompleted ? 'Completed' : 'Upcoming'}
                     </span>
                   </div>
                   {isInProgress && (
-                    <span className="text-xs font-mono text-[#E58B4E] font-medium flex items-center gap-1.5">
+                    <span className="text-xs font-mono text-[#FFAE70] font-semibold flex items-center gap-1.5">
                       <Radio size={13} className="animate-pulse" />
                       Active Focus
                     </span>
@@ -168,21 +173,21 @@ export function RoadmapSection() {
                 <h3 className="text-xl sm:text-2xl font-light text-[#FAF8F5] mb-3">
                   {m.title}
                 </h3>
-                <p className="text-sm text-[#C8D0CC] leading-relaxed mb-6 max-w-3xl">
+                <p className="text-sm sm:text-base text-[#D4DDD8] leading-relaxed mb-6 max-w-3xl font-normal">
                   {m.description}
                 </p>
 
-                <div className="pt-4 border-t border-[#2A2D2C]/60">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#A6B2AC] mb-2.5 font-medium">
+                <div className="pt-5 border-t border-[#2A2D2C]/80">
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#FAF8F5] mb-3 font-semibold">
                     Core Deliverables
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                     {m.deliverables.map((item) => (
                       <div
                         key={item}
-                        className="text-xs font-mono text-[#FAF8F5] bg-[#181B1A] border border-[#2A2D2C] px-3 py-2 rounded-lg flex items-center gap-2"
+                        className="text-xs font-mono text-[#FAF8F5] bg-[#181B1A] border border-[#2A2D2C] px-3.5 py-2.5 rounded-xl flex items-center gap-2.5 hover:border-[#E58B4E]/40 transition-colors"
                       >
-                        <span className="w-1 h-1 rounded-full bg-[#E58B4E] shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E] shrink-0" />
                         <span className="truncate">{item}</span>
                       </div>
                     ))}

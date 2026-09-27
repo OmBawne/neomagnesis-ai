@@ -122,7 +122,7 @@ body {
 ::-webkit-scrollbar-thumb    { background: #181B1A; border-radius: 3px; border: 1px solid #2A2D2C; }
 ::-webkit-scrollbar-thumb:hover { background: #2A2D2C; }
 
-/* ─── GLASS DOCK ─────────────────────────────────────────────────────────────── */
+/* ─── GLASS DOCK ─────────────────────────────────────────────────────────── */
 .dock-glass {
   background: var(--dock-bg);
   backdrop-filter: blur(24px) saturate(1.4);
@@ -132,7 +132,7 @@ body {
   box-shadow: var(--dock-shadow);
 }
 
-/* ─── MODAL GLASS ────────────────────────────────────────────────────────────── */
+/* ─── MODAL GLASS ────────────────────────────────────────────────────────── */
 .modal-glass {
   background: var(--modal-bg);
   backdrop-filter: blur(24px) saturate(1.4);
@@ -142,20 +142,22 @@ body {
   box-shadow: var(--modal-shadow);
 }
 
-/* ─── MATTE SURFACES (Cards, Panels) ────────────────────────────────────────── */
+/* ─── MATTE SURFACES (Cards, Panels) ─────────────────────────────────────── */
 .surface-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  transition: border-color 0.2s var(--ease-spring),
-              transform 0.2s var(--ease-spring),
-              box-shadow 0.2s var(--ease-spring);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.45);
+  position: relative;
+  transition: border-color 0.25s var(--ease-spring),
+              transform 0.25s var(--ease-spring),
+              box-shadow 0.25s var(--ease-spring);
 }
 
 .surface-card:hover {
-  border-color: rgba(184, 115, 51, 0.35);
+  border-color: rgba(229, 139, 78, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(229, 139, 78, 0.15);
 }
 
 .surface-elevated {
@@ -164,31 +166,32 @@ body {
   border-radius: var(--radius-lg);
 }
 
-/* ─── BUTTONS ────────────────────────────────────────────────────────────────── */
+/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
 .btn-primary {
-  background: var(--color-surface-raised);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  font-size: 0.875rem;
-  letter-spacing: -0.01em;
+  background: #FAF8F5;
+  color: #08090A;
+  border: 1px solid rgba(241, 239, 232, 0.3);
+  padding: 0.75rem 1.625rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: all 0.2s var(--ease-spring);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
 .btn-primary:hover {
-  border-color: rgba(184, 115, 51, 0.6);
-  background: #1E2220;
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(184, 115, 51, 0.2);
+  background: #FFFFFF;
+  box-shadow: 0 0 24px rgba(241, 239, 232, 0.35);
   transform: translateY(-1px);
 }
 
@@ -198,27 +201,30 @@ body {
 }
 
 .btn-copper {
-  background: var(--color-accent);
-  color: #080909;
-  border: 1px solid transparent;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
+  background: #FAF8F5;
+  color: #08090A;
+  border: 1px solid rgba(241, 239, 232, 0.3);
+  padding: 0.75rem 1.625rem;
+  border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: 0.875rem;
-  letter-spacing: -0.01em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(184, 115, 51, 0.3);
+  box-shadow: 0 4px 16px rgba(229, 139, 78, 0.25);
   transition: all 0.2s var(--ease-spring);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
 .btn-copper:hover {
-  background: var(--color-accent-hover);
-  box-shadow: 0 4px 20px rgba(184, 115, 51, 0.4);
+  background: #FFFFFF;
+  box-shadow: 0 0 28px rgba(241, 239, 232, 0.35);
   transform: translateY(-1px);
 }
 
@@ -227,34 +233,38 @@ body {
 }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--color-text-secondary);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  font-size: 0.875rem;
-  letter-spacing: -0.01em;
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FAF8F5;
+  padding: 0.75rem 1.625rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.2s var(--ease-spring);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   text-decoration: none;
   white-space: nowrap;
 }
 
 .btn-ghost:hover {
-  color: var(--color-text-primary);
-  border-color: var(--color-text-secondary);
-  background: rgba(241, 239, 232, 0.03);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 .btn-ghost:active {
   transform: scale(0.98);
 }
 
-/* ─── INPUTS ─────────────────────────────────────────────────────────────────── */
+/* ─── INPUTS ─────────────────────────────────────────────────────────────── */
 .neo-input {
   background: var(--color-surface-raised);
   border: 1px solid var(--color-border);
@@ -302,7 +312,7 @@ body {
   padding-left: 44px;
 }
 
-/* ─── MONO LABEL ─────────────────────────────────────────────────────────────── */
+/* ─── MONO LABEL ─────────────────────────────────────────────────────────── */
 .mono-label {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -312,7 +322,7 @@ body {
   color: var(--color-text-secondary);
 }
 
-/* ─── SECTION SEPARATOR ──────────────────────────────────────────────────────── */
+/* ─── SECTION SEPARATOR ──────────────────────────────────────────────────── */
 .section-separator {
   border-top: 1px solid var(--color-border);
 }
@@ -360,7 +370,7 @@ body {
   gap: 0.375rem;
 }
 
-/* ─── SIDEBAR LINKS (Dashboard — keep for compatibility) ─────────────────────── */
+/* ─── SIDEBAR LINKS ──────────────────────────────────────────────────────── */
 .sidebar-link {
   display: flex;
   align-items: center;
@@ -380,7 +390,7 @@ body {
 .sidebar-link:hover  { color: var(--color-text-primary); background: rgba(154, 161, 158, 0.08); }
 .sidebar-link.active { color: var(--color-text-primary); background: rgba(154, 161, 158, 0.12); }
 
-/* ─── ANIMATIONS ─────────────────────────────────────────────────────────────── */
+/* ─── ANIMATIONS ─────────────────────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -468,7 +478,7 @@ body {
   animation: shimmer 1.8s ease-in-out infinite;
 }
 
-/* ─── BLUEPRINT SVG ──────────────────────────────────────────────────────────── */
+/* ─── BLUEPRINT SVG ──────────────────────────────────────────────────────── */
 .blueprint-line {
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
@@ -479,7 +489,7 @@ body {
   stroke-dashoffset: 0;
 }
 
-/* ─── LAUNCH PASS ────────────────────────────────────────────────────────────── */
+/* ─── LAUNCH PASS ────────────────────────────────────────────────────────── */
 .launch-pass {
   background: linear-gradient(135deg, #111312 0%, #181B1A 100%);
   border: 1px solid rgba(184, 115, 51, 0.4);
@@ -498,14 +508,14 @@ body {
   background: linear-gradient(90deg, transparent, rgba(184, 115, 51, 0.6), transparent);
 }
 
-/* ─── FOCUS RING ─────────────────────────────────────────────────────────────── */
+/* ─── FOCUS RING ─────────────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* ─── REDUCED MOTION ─────────────────────────────────────────────────────────── */
+/* ─── REDUCED MOTION ─────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -515,7 +525,7 @@ body {
   }
 }
 
-/* ─── UTILITY CLASSES ────────────────────────────────────────────────────────── */
+/* ─── UTILITY CLASSES ────────────────────────────────────────────────────── */
 .container {
   max-width: var(--content-width);
   margin: 0 auto;
