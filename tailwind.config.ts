@@ -46,7 +46,6 @@ const config: Config = {
           border:  'rgba(168, 75, 75, 0.35)',
         },
         // Base tokens
-        base:    '#080909',
         surface: '#111312',
         border:  '#2A2D2C',
       },

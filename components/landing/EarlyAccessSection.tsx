@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { ArrowRight, Shield, Sparkles, Key, Lock } from 'lucide-react'
 import { EarlyAccessModal } from '@/components/ui/EarlyAccessModal'
 
@@ -13,6 +13,14 @@ const perks = [
 
 export function EarlyAccessSection() {
   const [modalOpen, setModalOpen] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Subtle scroll-linked background gradient - replaces static ambient glow
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0.04, 0.08, 0.04])
 
   return (
     <>
@@ -20,18 +28,13 @@ export function EarlyAccessSection() {
 
       <section
         id="early-access"
+        ref={sectionRef}
         className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]"
+        style={{ 
+          background: `radial-gradient(ellipse at 50% 50%, rgba(184,115,51,${sectionBgOpacity}) 0%, transparent 70%)`,
+        }}
         aria-labelledby="early-access-heading"
       >
-        {/* Ambient glow — restrained, non-glowing */}
-        <div
-          aria-hidden="true"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] pointer-events-none -z-10"
-          style={{
-            background: 'radial-gradient(ellipse at center, rgba(184,115,51,0.04) 0%, transparent 70%)',
-          }}
-        />
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           {/* Left: Editorial copy */}
           <div className="lg:col-span-5">
@@ -73,7 +76,7 @@ export function EarlyAccessSection() {
               No spam. No telemetry. No obligations.
             </motion.p>
 
-            {/* Perks */}
+            {/* Perks with staggered reveals */}
             <motion.div
               className="space-y-4 mb-10"
               initial={{ opacity: 0, y: 10 }}
@@ -81,11 +84,18 @@ export function EarlyAccessSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
             >
-              {perks.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-start gap-3 text-sm sm:text-base text-[#FAF8F5]">
+              {perks.map(({ icon: Icon, text }, idx) => (
+                <motion.div
+                  key={text}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-start gap-3 text-sm sm:text-base text-[#FAF8F5]"
+                >
                   <Icon size={16} className="text-[#FFAE70] shrink-0 mt-1" aria-hidden="true" />
                   <span>{text}</span>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
 
@@ -98,11 +108,17 @@ export function EarlyAccessSection() {
               <button
                 id="open-early-access-modal"
                 onClick={() => setModalOpen(true)}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-xs font-mono uppercase tracking-widest font-semibold bg-[#FAF8F5] text-[#08090A] hover:bg-white hover:shadow-[0_0_30px_rgba(241,239,232,0.35)] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-200 cursor-pointer"
+                className="btn-primary group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-xs font-mono uppercase tracking-widest font-semibold"
                 aria-label="Open Early Access registration"
               >
                 <span>Claim Your Launch Pass</span>
-                <ArrowRight size={14} aria-hidden="true" />
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  whileTap={{ x: 0, scale: 0.9 }}
+                  transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ArrowRight size={14} aria-hidden="true" />
+                </motion.div>
               </button>
             </motion.div>
           </div>
@@ -166,11 +182,17 @@ export function EarlyAccessSection() {
               {/* CTA */}
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full py-3.5 rounded-xl text-xs font-mono uppercase tracking-widest font-semibold cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 bg-[#E58B4E]/15 hover:bg-[#E58B4E]/25 border border-[#E58B4E]/40 text-[#FFAE70] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]"
+                className="btn-accent w-full py-3.5 rounded-xl text-xs font-mono uppercase tracking-widest font-semibold cursor-pointer flex items-center justify-center gap-2"
                 aria-label="Register for Early Access"
               >
                 <span>Register for Early Access</span>
-                <ArrowRight size={14} aria-hidden="true" />
+                <motion.div
+                  whileHover={{ x: 4 }}
+                  whileTap={{ x: 0, scale: 0.9 }}
+                  transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ArrowRight size={14} aria-hidden="true" />
+                </motion.div>
               </button>
 
               {/* Privacy note */}

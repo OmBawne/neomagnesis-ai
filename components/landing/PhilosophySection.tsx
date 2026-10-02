@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 interface PhilosophyStatement {
   id: string
@@ -68,21 +68,31 @@ const statements: PhilosophyStatement[] = [
 ]
 
 function Statement({ statement, index }: { statement: PhilosophyStatement; index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-8%' })
+  const prefersReduced = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false
+
   return (
     <motion.div
+      ref={ref}
       key={statement.id}
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-8%' }}
-      transition={{ duration: 0.85, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+      initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.75, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start py-16 lg:py-20 group"
       style={{ borderTop: index > 0 ? '1px solid #2A2D2C' : undefined }}
     >
-      {/* Statement number badge */}
+      {/* Statement number badge with subtle hover */}
       <div className="lg:col-span-1 flex items-start pt-2">
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-[#FFAE70] font-semibold bg-[#E58B4E]/10 border border-[#E58B4E]/30 px-2.5 py-1 rounded-full">
+        <motion.span
+          whileHover={{ scale: 1.05, y: -2 }}
+          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="font-mono text-xs tracking-[0.2em] uppercase text-[#FFAE70] font-semibold bg-[#E58B4E]/10 border border-[#E58B4E]/30 px-2.5 py-1 rounded-full"
+        >
           {statement.num}
-        </span>
+        </motion.span>
       </div>
 
       {/* Main statement */}
@@ -111,20 +121,25 @@ export default function PhilosophySection() {
     target: sectionRef,
     offset: ['start end', 'end start'],
   })
+  const isSectionInView = useInView(sectionRef, { once: true, margin: '-20%' })
 
   // Subtle parallax on the overline
-  const overlineY = useTransform(scrollYProgress, [0, 1], ['0px', '-24px'])
+  const overlineY = useTransform(scrollYProgress, [0, 1], ['0px', '-16px'])
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.08, 0])
 
   return (
     <section
       id="philosophy"
       ref={sectionRef}
       className="relative py-20 lg:py-28 px-5 sm:px-8"
-      style={{ borderTop: '1px solid #2A2D2C' }}
+      style={{ 
+        borderTop: '1px solid #2A2D2C',
+        background: `radial-gradient(ellipse at 50% 0%, rgba(229,139,78,${sectionBgOpacity}) 0%, transparent 60%)`,
+      }}
       aria-labelledby="philosophy-heading"
     >
       <div className="max-w-[1200px] mx-auto">
-        {/* Overline */}
+        {/* Overline with scroll-linked parallax */}
         <motion.div
           style={{ y: overlineY }}
           className="mb-14 lg:mb-18 flex items-center gap-3"
@@ -152,10 +167,15 @@ export default function PhilosophySection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="pt-12 lg:pt-16 flex items-center gap-6"
         >
-          <div className="w-16 h-px bg-[#E58B4E] opacity-75" />
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: '4rem' }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="h-px bg-[#E58B4E] opacity-75"
+          />
           <span className="font-mono text-xs tracking-[0.2em] uppercase text-[#FFAE70] font-semibold">
             Built differently
           </span>

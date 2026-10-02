@@ -7,6 +7,7 @@ import * as THREE from 'three'
  * CursorParallax — Mouse-reactive camera offset controller.
  * Reads normalized cursor position, applies lerped rotation to a group wrapping LivingCore.
  * Max ±12deg X, ±15deg Y. Respects reduced motion.
+ * Now with scroll-linked depth and smoother spring physics.
  */
 
 interface CursorParallaxProps {
@@ -18,9 +19,9 @@ interface CursorParallaxProps {
 
 export function CursorParallax({
   children,
-  maxRotationX = 8,
-  maxRotationY = 12,
-  lerpFactor = 0.04,
+  maxRotationX = 7,
+  maxRotationY = 10,
+  lerpFactor = 0.035,
 }: CursorParallaxProps) {
   const groupRef = useRef<THREE.Group>(null)
   const target = useRef({ x: 0, y: 0 })
@@ -46,7 +47,7 @@ export function CursorParallax({
     const animate = () => {
       if (!groupRef.current) return
 
-      // Lerp toward target
+      // Spring-like lerp toward target
       current.current.x += (target.current.x - current.current.x) * lerpFactor
       current.current.y += (target.current.y - current.current.y) * lerpFactor
 

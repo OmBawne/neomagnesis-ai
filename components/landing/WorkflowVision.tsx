@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { ArrowRight, BookOpen, PenTool, Terminal, GitBranch, Shield, CheckCircle2 } from 'lucide-react'
 
 interface WorkflowItem {
@@ -26,7 +27,7 @@ const workflows: WorkflowItem[] = [
     title: 'Multi-Source Knowledge Graph',
     tagline: 'Aggregate local archives without external indexing.',
     description:
-      'Neomagnesis scans your local PDFs, markdown notes, codebases, and offline documentation. It synthesizes cross-referenced knowledge graphs entirely within local memory, ensuring proprietary research never traverses public networks.',
+      'Neomagnesis scans your local PDFs, markdown notes, codebases, and offline documentation. It synthesizes cross-referenced knowledge graphs within local memory, keeping your proprietary research off public networks by default.',
     nodes: {
       inputs: [
         { title: 'Local PDF Archives', type: 'Local Storage' },
@@ -35,7 +36,7 @@ const workflows: WorkflowItem[] = [
       ],
       processor: {
         title: 'Local Context Core',
-        subtitle: 'Zero-cloud semantic vectorization & citation mapping',
+        subtitle: 'Local semantic indexing & citation mapping',
         badge: 'Isolated Process',
       },
       outputs: [
@@ -95,7 +96,7 @@ const workflows: WorkflowItem[] = [
         { title: 'Audit Execution Log', type: 'Local JSONL' },
       ],
     },
-    principles: ['Explicit boundary confirmation', 'Dry-run rollback safety', 'Sub-millisecond native hooks'],
+    principles: ['Explicit boundary confirmation', 'Dry-run rollback safety', 'Native OS event hooks'],
   },
   {
     id: 'engineering',
@@ -126,12 +127,18 @@ const workflows: WorkflowItem[] = [
 ]
 
 function WorkflowCard({ workflow, index }: { workflow: WorkflowItem; index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-8%' })
+  const prefersReduced = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-8%' }}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      ref={ref}
+      initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className="surface-card rounded-2xl overflow-hidden border border-[#2A2D2C] hover:border-[#E58B4E]/40 hover:-translate-y-1 transition-all duration-300 shadow-[0_12px_36px_rgba(0,0,0,0.45)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.6)]"
     >
       {/* Card Header & Node Graph */}
@@ -144,7 +151,7 @@ function WorkflowCard({ workflow, index }: { workflow: WorkflowItem; index: numb
             </span>
           </div>
           <span className="text-[10px] font-mono text-[#D4DDD8] bg-[#181B1A] px-2.5 py-1 rounded-full border border-[#2A2D2C] font-medium">
-            Air-Gapped Loop
+            Local Processing Loop
           </span>
         </div>
 
@@ -214,7 +221,7 @@ function WorkflowCard({ workflow, index }: { workflow: WorkflowItem; index: numb
                   {workflow.nodes.processor.subtitle}
                 </div>
                 <div className="mt-3.5 pt-2.5 border-t border-[#2A2D2C] flex items-center justify-between text-[10px] font-mono text-[#D4DDD8]">
-                  <span>Latency: 0ms net</span>
+                  <span>Local execution</span>
                   <Shield size={13} className="text-[#FFAE70]" />
                 </div>
               </motion.div>
@@ -262,7 +269,7 @@ function WorkflowCard({ workflow, index }: { workflow: WorkflowItem; index: numb
         <div className="pt-4 border-t border-[#2A2D2C]/80 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-[#D4DDD8]">
           <span className="flex items-center gap-1.5 text-[#D4DDD8]">
             <CheckCircle2 size={13} className="text-[#64B889]" />
-            Zero external telemetry dispatched
+            No unnecessary external telemetry dispatched
           </span>
           <span className="text-[#FAF8F5] font-medium">Native OS Thread #1</span>
         </div>
@@ -307,26 +314,60 @@ function WorkflowCard({ workflow, index }: { workflow: WorkflowItem; index: numb
 }
 
 export function WorkflowVision() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Subtle scroll-linked background gradient
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.05, 0])
+
   return (
-    <section id="workflows" className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
+    <section
+      id="workflows"
+      ref={sectionRef}
+      className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]"
+      style={{ 
+        background: `radial-gradient(ellipse at 50% 0%, rgba(229,139,78,${sectionBgOpacity}) 0%, transparent 60%)`,
+      }}
+    >
       {/* Section Header */}
       <div className="max-w-3xl mb-14 lg:mb-18">
-        <div className="flex items-center gap-2.5 mb-4">
+        <motion.div
+          className="flex items-center gap-2.5 mb-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
           <span className="mono-label text-[#FAF8F5] font-medium">
             // Workflow Vision
           </span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5">
+        </motion.div>
+        <motion.h2
+          className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
           Deterministic execution.{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
             Contextual intelligence.
           </span>
-        </h2>
-        <p className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal">
+        </motion.h2>
+        <motion.p
+          className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
           Neomagnesis orchestrates multi-step, autonomous tasks directly on your machine.
-          Observe how information flows through isolated local processing nodes without contacting cloud servers.
-        </p>
+          Information flows through isolated local processing nodes, minimising unnecessary contact with external services.
+        </motion.p>
       </div>
 
       {/* Four Workflow Cards - stacked vertically with generous spacing */}

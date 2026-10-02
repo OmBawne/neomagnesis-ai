@@ -39,7 +39,7 @@ export default function ProductShowcase() {
           Intelligence with <span className="font-normal text-[#F1EFE8]">total visibility</span>.
         </h2>
         <p className="text-base sm:text-lg text-[#9AA19E] leading-relaxed font-normal">
-          No black boxes. Neomagnesis exposes step-by-step reasoning tokens, live execution checkpoints, and schema contracts so engineering teams maintain complete oversight.
+          No black boxes. Neomagnesis exposes execution steps, agent actions, and schema contracts so engineering teams maintain complete oversight.
         </p>
       </div>
 

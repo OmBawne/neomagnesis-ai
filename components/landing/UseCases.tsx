@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { UserCheck, Code2, Briefcase, Lock } from 'lucide-react'
 
 const useCases = [
@@ -11,7 +12,7 @@ const useCases = [
     icon: UserCheck,
     title: 'Private Synthesis of Sensitive Archives',
     description:
-      'Analyze internal whitepapers, proprietary datasets, and confidential interview transcripts without uploading a single token to third-party model providers.',
+      'Analyze internal whitepapers, proprietary datasets, and confidential interview transcripts — processed locally, not uploaded to third-party model providers.',
     points: [
       'Zero external data egress',
       'Local citation cross-referencing',
@@ -41,7 +42,7 @@ const useCases = [
     icon: Briefcase,
     title: 'Offline Executive Intelligence',
     description:
-      'Synthesize customer feedback, financial reports, and meeting summaries into structured action items on your desktop, even when working completely offline.',
+      'Synthesize customer feedback, financial reports, and meeting summaries into structured action items on your desktop, with core workflows available under limited or absent connectivity.',
     points: [
       'Full offline capability',
       'Deterministic document parsing',
@@ -56,7 +57,7 @@ const useCases = [
     icon: Lock,
     title: 'Auditable Local Agent Execution',
     description:
-      'Deploy autonomous agents with complete transparency into step-by-step reasoning tokens, local file modifications, and auditable JSONL execution logs.',
+      'Deploy autonomous agents with complete transparency into agent actions, local file modifications, and auditable JSONL execution logs.',
     points: [
       'Immutable local logs',
       'No hidden telemetry',
@@ -67,15 +68,20 @@ const useCases = [
 ]
 
 function UseCaseCard({ uc, idx }: { uc: typeof useCases[0]; idx: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-8%' })
+  const prefersReduced = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false
   const Icon = uc.icon
 
   return (
     <motion.div
+      ref={ref}
       key={uc.id}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+      transition={{ duration: 0.6, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
       className="surface-card rounded-2xl p-7 sm:p-9 flex flex-col justify-between border border-[#2A2D2C] hover:border-[#E58B4E]/40 hover:-translate-y-1 transition-all duration-300 shadow-[0_12px_36px_rgba(0,0,0,0.4)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.6)] group h-full"
     >
       <div>
@@ -120,26 +126,60 @@ function UseCaseCard({ uc, idx }: { uc: typeof useCases[0]; idx: number }) {
 }
 
 export function UseCases() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Subtle scroll-linked background gradient
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.05, 0])
+
   return (
-    <section id="use-cases" className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
+    <section
+      id="use-cases"
+      ref={sectionRef}
+      className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]"
+      style={{ 
+        background: `radial-gradient(ellipse at 50% 0%, rgba(229,139,78,${sectionBgOpacity}) 0%, transparent 60%)`,
+      }}
+    >
       {/* Header */}
       <div className="max-w-3xl mb-14 lg:mb-18">
-        <div className="flex items-center gap-2.5 mb-4">
+        <motion.div
+          className="flex items-center gap-2.5 mb-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
           <span className="mono-label text-[#FAF8F5] font-medium">
             // Applied Deployments
           </span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5">
+        </motion.div>
+        <motion.h2
+          className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
           Architected for <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
             high-leverage practitioners
           </span>.
-        </h2>
-        <p className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal">
+        </motion.h2>
+        <motion.p
+          className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
           Neomagnesis is designed for individuals and teams who require uncompromising privacy,
           predictable execution, and deep local system leverage.
-        </p>
+        </motion.p>
       </div>
 
       {/* 4 Standardized Cards */}

@@ -34,7 +34,7 @@ const tertiaryFeatures = [
   {
     icon: Activity,
     title: 'Deterministic Audit Trails',
-    desc: 'Inspect step-by-step reasoning tokens, execution latency, and automated decision rationales in real time.',
+    desc: 'Inspect agent actions, execution steps, and automated decision rationales — all logged locally in real time.',
   },
 ]
 

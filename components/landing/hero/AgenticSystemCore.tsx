@@ -11,6 +11,7 @@ import * as THREE from 'three'
  * - Local computation (inner core boundary)
  * - Interconnected systems (smooth data pulse transit)
  * - The Nucleus Loop harmony (120-degree tripartite geometry)
+ * Refined: smoother rotations, reduced amplitude, more deliberate pacing
  */
 
 interface RibbonProps {
@@ -55,7 +56,7 @@ function SystemRibbon({ rotationZ, tiltX, tiltY, color, roughness, metalness, ra
   )
 }
 
-/** Faceted Agent Computational Nodes */
+/** Faceted Agent Computational Nodes - refined: slower, more deliberate rotation */
 function AgentNodes({ radius }: { radius: number }) {
   const nodesRef = useRef<THREE.Group>(null)
 
@@ -74,10 +75,11 @@ function AgentNodes({ radius }: { radius: number }) {
     const t = clock.getElapsedTime()
     nodesRef.current.children.forEach((child, i) => {
       const mesh = child as THREE.Mesh
-      mesh.rotation.x = t * (0.4 + i * 0.1)
-      mesh.rotation.y = t * (0.5 - i * 0.08)
-      // Subtle heartbeat pulse
-      const pulse = 1 + Math.sin(t * 2.5 + i) * 0.12
+      // Slower, more deliberate rotation
+      mesh.rotation.x = t * (0.15 + i * 0.04)
+      mesh.rotation.y = t * (0.2 - i * 0.03)
+      // Subtle heartbeat pulse - reduced amplitude
+      const pulse = 1 + Math.sin(t * 1.8 + i) * 0.06
       mesh.scale.setScalar(pulse)
     })
   })
@@ -99,7 +101,7 @@ function AgentNodes({ radius }: { radius: number }) {
               metalness={0.7}
               roughness={0.25}
               emissive={node.color}
-              emissiveIntensity={0.2}
+              emissiveIntensity={0.15}
             />
           </mesh>
         )
@@ -108,15 +110,15 @@ function AgentNodes({ radius }: { radius: number }) {
   )
 }
 
-/** Traveling Data Photons between Autonomous Agents */
+/** Traveling Data Photons between Autonomous Agents - refined: fewer, slower */
 function DataPulses({ radius }: { radius: number }) {
-  const count = 18
+  const count = 12 // reduced from 18
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const meshRef = useRef<THREE.InstancedMesh>(null)
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return
-    const t = clock.getElapsedTime() * 0.35
+    const t = clock.getElapsedTime() * 0.22 // slower
 
     for (let i = 0; i < count; i++) {
       const progress = (t + (i / count)) % 1
@@ -127,7 +129,7 @@ function DataPulses({ radius }: { radius: number }) {
       const z = 0.45 * radius * Math.sin(2 * u) * Math.cos(u)
 
       dummy.position.set(x, y, z)
-      const s = 0.022 * (1 + Math.sin(u * 4) * 0.4)
+      const s = 0.018 * (1 + Math.sin(u * 4) * 0.3) // smaller
       dummy.scale.set(s, s, s)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)
@@ -138,20 +140,20 @@ function DataPulses({ radius }: { radius: number }) {
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
       <sphereGeometry args={[1, 8, 8]} />
-      <meshBasicMaterial color="#C87D55" transparent opacity={0.8} />
+      <meshBasicMaterial color="#C87D55" transparent opacity={0.6} />
     </instancedMesh>
   )
 }
 
-/** Inner Local Kernel Core Ring */
+/** Inner Local Kernel Core Ring - refined: slower rotation */
 function LocalKernelRing() {
   const ringRef = useRef<THREE.Mesh>(null)
 
   useFrame(({ clock }) => {
     if (!ringRef.current) return
     const t = clock.getElapsedTime()
-    ringRef.current.rotation.z = -t * 0.04
-    ringRef.current.rotation.x = Math.sin(t * 0.05) * 0.1
+    ringRef.current.rotation.z = -t * 0.02 // slower
+    ringRef.current.rotation.x = Math.sin(t * 0.03) * 0.06
   })
 
   return (
@@ -174,13 +176,13 @@ export function AgenticSystemCore() {
     if (!mainGroup.current) return
     const t = clock.getElapsedTime()
 
-    // Smooth, deliberate dignified planetary rotation
-    mainGroup.current.rotation.y = t * 0.055
-    mainGroup.current.rotation.x = Math.sin(t * 0.02) * 0.06
-    mainGroup.current.rotation.z = Math.cos(t * 0.018) * 0.04
+    // Smooth, deliberate dignified planetary rotation - slower
+    mainGroup.current.rotation.y = t * 0.035
+    mainGroup.current.rotation.x = Math.sin(t * 0.015) * 0.04
+    mainGroup.current.rotation.z = Math.cos(t * 0.012) * 0.025
 
-    // Subtle breathing cycle (6 second period)
-    const breath = 1 + Math.sin(t * (Math.PI / 3)) * 0.012
+    // Subtle breathing cycle (8 second period) - slower, smaller
+    const breath = 1 + Math.sin(t * (Math.PI / 4)) * 0.008
     mainGroup.current.scale.setScalar(breath)
   })
 

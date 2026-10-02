@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import { Check, Radio } from 'lucide-react'
 
 interface Milestone {
@@ -20,8 +21,8 @@ const milestones: Milestone[] = [
     description:
       'Foundational brand identity, Nucleus Loop design system, architectural doctrine, and local-first execution specifications.',
     deliverables: [
-      'Ink Wash visual language & design tokens',
-      'Local-first air-gapped runtime specifications',
+      'Foundational visual identity & design tokens',
+      'Local-first runtime architecture specifications',
       'Cryptographic execution boundaries research',
     ],
     status: 'completed',
@@ -46,7 +47,7 @@ const milestones: Milestone[] = [
     description:
       'First deployment of the isolated local agent execution environment, supporting local LLMs and offline document indexing.',
     deliverables: [
-      'Local context engine with zero cloud egress',
+      'Local context engine with minimal external calls',
       'Deterministic permission boundary verification',
       'CLI toolchain for local workflow triggers',
     ],
@@ -60,7 +61,7 @@ const milestones: Milestone[] = [
       'Intuitive node-based canvas for constructing, testing, and monitoring complex multi-agent execution graphs.',
     deliverables: [
       'Interactive visual graph editor for local pipelines',
-      'Step-by-step reasoning inspector & JSONL audit trail',
+      'Execution step inspector & JSONL audit trail',
       'Custom skill & plugin loader interface',
     ],
     status: 'upcoming',
@@ -73,34 +74,68 @@ const milestones: Milestone[] = [
       'Full production desktop operating system shell built with Rust and Tauri, featuring native hardware acceleration and deep OS hooks.',
     deliverables: [
       'Cross-platform desktop binaries (macOS, Windows, Linux)',
-      'Sub-millisecond filesystem event watchers',
-      'Offline-first encrypted vault storage',
+      'High-performance filesystem event watchers',
+      'Encrypted local vault storage',
     ],
     status: 'upcoming',
   },
 ]
 
 export function RoadmapSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  // Subtle scroll-linked background gradient
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.05, 0])
+
   return (
-    <section id="roadmap" className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]">
+    <section
+      id="roadmap"
+      ref={sectionRef}
+      className="relative py-20 lg:py-28 px-5 sm:px-8 max-w-[1200px] mx-auto border-t border-[#2A2D2C]"
+      style={{ 
+        background: `radial-gradient(ellipse at 50% 0%, rgba(229,139,78,${sectionBgOpacity}) 0%, transparent 60%)`,
+      }}
+    >
       {/* Header */}
       <div className="max-w-3xl mb-14 lg:mb-18">
-        <div className="flex items-center gap-2.5 mb-4">
+        <motion.div
+          className="flex items-center gap-2.5 mb-4"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <span className="w-1.5 h-1.5 rounded-full bg-[#E58B4E]" aria-hidden="true" />
           <span className="mono-label text-[#FAF8F5] font-medium">
             // Product Evolution
           </span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5">
+        </motion.div>
+        <motion.h2
+          className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#FAF8F5] tracking-[-0.025em] leading-[1.12] mb-5"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
           Architectural roadmap. <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FAF8F5] via-[#FFAE70] to-[#E58B4E] font-normal">
             Milestones without speculation.
           </span>
-        </h2>
-        <p className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal">
+        </motion.h2>
+        <motion.p
+          className="text-base sm:text-lg text-[#D4DDD8] leading-relaxed font-normal"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
           We do not publish artificial calendar deadlines. We advance through strict technical milestones,
           releasing each capability only when it satisfies our standards for privacy, stability, and craft.
-        </p>
+        </motion.p>
       </div>
 
       {/* Vertical Timeline */}
@@ -108,14 +143,19 @@ export function RoadmapSection() {
         {milestones.map((m, idx) => {
           const isCompleted = m.status === 'completed'
           const isInProgress = m.status === 'in-progress'
+          const cardRef = useRef<HTMLDivElement>(null)
+          const isCardInView = useInView(cardRef, { once: true, margin: '-8%' })
+          const prefersReduced = typeof window !== 'undefined' 
+            ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+            : false
 
           return (
             <motion.div
+              ref={cardRef}
               key={m.id}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              initial={prefersReduced ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+              animate={isCardInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+              transition={{ duration: 0.6, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
               className="relative group"
             >
               {/* Timeline Marker Node (centered exactly on border-l: 24px/40px pl + 12px half + 1px border = 37px/53px) */}

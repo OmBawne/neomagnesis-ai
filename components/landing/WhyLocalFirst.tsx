@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 
 interface DiagramProps {
   isRevealed: boolean
@@ -58,7 +58,7 @@ function PrivacyDiagram({ isRevealed }: DiagramProps) {
         style={{ transition: 'opacity 0.3s ease 0.7s' }} />
 
       {/* Label */}
-      <text x="110" y="150" textAnchor="middle" fill="#FAF8F5" fontSize="8.5" fontFamily="monospace" fontWeight="600" letterSpacing="1">ZERO CLOUD DEPENDENCY</text>
+      <text x="110" y="150" textAnchor="middle" fill="#FAF8F5" fontSize="8.5" fontFamily="monospace" fontWeight="600" letterSpacing="1">LOCAL-FIRST DESIGN</text>
     </svg>
   )
 }
@@ -183,30 +183,32 @@ function IndependenceDiagram({ isRevealed }: DiagramProps) {
         OPERATING
       </text>
 
-      <text x="110" y="150" textAnchor="middle" fill="#FAF8F5" fontSize="8.5" fontFamily="monospace" fontWeight="600" letterSpacing="1">WORKS WITHOUT INTERNET</text>
+      <text x="110" y="150" textAnchor="middle" fill="#FAF8F5" fontSize="8.5" fontFamily="monospace" fontWeight="600" letterSpacing="1">REDUCED CLOUD DEPENDENCY</text>
     </svg>
   )
 }
 
 const diagrams = [
-  { id: 'privacy',       title: 'Private by Architecture',    desc: 'No data ever leaves your machine. Your conversations, files, and models stay local.', Diagram: PrivacyDiagram },
+  { id: 'privacy',       title: 'Private by Architecture',    desc: 'Core processing stays on your device. Your local files, notes, and models are not sent to external servers by default.', Diagram: PrivacyDiagram },
   { id: 'ownership',     title: 'You Own Everything',         desc: 'Your workflows, your agents, your data. No vendor lock-in, no hidden data sharing.', Diagram: OwnershipDiagram },
-  { id: 'performance',   title: 'Local Speed, Globally Fast', desc: 'Run models directly on your hardware. Response times measured in milliseconds, not seconds.', Diagram: PerformanceDiagram },
-  { id: 'independence',  title: 'Works Without Internet',     desc: 'Critical workflows keep running even when your connection drops. Resilience is designed in.', Diagram: IndependenceDiagram },
+  { id: 'performance',   title: 'Local Speed, Lower Latency', desc: 'Run models directly on your hardware. Local execution removes round-trip overhead and delivers faster, more predictable responses.', Diagram: PerformanceDiagram },
+  { id: 'independence',  title: 'Designed for Resilience',    desc: 'Core local workflows continue operating under degraded or absent connectivity. Online services are used only where necessary.', Diagram: IndependenceDiagram },
 ]
 
-function DiagramCard({ diagram }: { diagram: typeof diagrams[0] }) {
-  const ref = useRef(null)
+function DiagramCard({ diagram, index }: { diagram: typeof diagrams[0]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-10%' })
   const { Diagram } = diagram
+  const prefersReduced = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-10%' }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       className="surface-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between border border-[#2A2D2C] hover:border-[#E58B4E]/40 hover:-translate-y-1 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.55)] group h-full"
     >
       {/* Blueprint diagram box */}
@@ -230,10 +232,24 @@ function DiagramCard({ diagram }: { diagram: typeof diagrams[0] }) {
 }
 
 export default function WhyLocalFirst() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  const isSectionInView = useInView(sectionRef, { once: true, margin: '-20%' })
+
+  // Subtle scroll-linked background gradient
+  const sectionBgOpacity = useTransform(scrollYProgress, [0, 0.3, 1], [0, 0.06, 0])
+
   return (
     <section
       id="why-local-first"
+      ref={sectionRef}
       className="relative py-20 lg:py-28 px-5 sm:px-8 border-t border-[#2A2D2C]"
+      style={{ 
+        background: `radial-gradient(ellipse at 50% 0%, rgba(229,139,78,${sectionBgOpacity}) 0%, transparent 60%)`,
+      }}
       aria-labelledby="why-local-first-heading"
     >
       <div className="max-w-[1200px] mx-auto">
@@ -271,24 +287,15 @@ export default function WhyLocalFirst() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            Local-first is not a compromise. It is a deliberate architecture that guarantees absolute privacy,
-            sub-millisecond latency, and permanent digital sovereignty that cloud-dependent software can never deliver.
+            Local-first is not a compromise. It is a deliberate architecture that prioritizes strong privacy by default,
+            significantly lower latency, and lasting ownership that centralised cloud-dependent software cannot provide.
           </motion.p>
         </div>
 
         {/* Blueprint diagram grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {diagrams.map((diagram, i) => (
-            <motion.div
-              key={diagram.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-              className="h-full"
-            >
-              <DiagramCard diagram={diagram} />
-            </motion.div>
+            <DiagramCard key={diagram.id} diagram={diagram} index={i} />
           ))}
         </div>
       </div>
