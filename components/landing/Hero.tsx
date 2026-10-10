@@ -1,26 +1,55 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Shield, Cpu, Network } from 'lucide-react'
 import { EarlyAccessModal } from '@/components/ui/EarlyAccessModal'
+import { KnowledgeWorkflow, AutomationWorkflow } from './hero/WorkflowVisualization'
 
 const HeroCanvas = dynamic(
   () => import('./hero/HeroCanvas').then((m) => m.HeroCanvas),
   { ssr: false, loading: () => null }
 )
 
-const prefersReducedMotion = typeof window !== 'undefined'
-  ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  : false
+const HeroParticles = dynamic(
+  () => import('./hero/HeroParticles').then((m) => m.HeroParticles),
+  { ssr: false, loading: () => null }
+)
 
 export default function Hero() {
   const [modalOpen, setModalOpen] = useState(false)
   const [canvasReady, setCanvasReady] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
+  const prefersReduced = useReducedMotion()
 
-  // Scroll-linked hero behavior
+  // Touch device detection — disable pointer parallax on touch
+  const [isTouch, setIsTouch] = useState(false)
+  useEffect(() => {
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    setIsTouch(hasTouch)
+  }, [])
+
+  // Pointer parallax state for workflow layers
+  const [pointerPos, setPointerPos] = useState({ x: 0, y: 0 })
+  const [pointerActive, setPointerActive] = useState(false)
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (prefersReduced || isTouch) return
+    const rect = sectionRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+    setPointerPos({ x, y })
+    setPointerActive(true)
+  }, [prefersReduced, isTouch])
+
+  const handlePointerLeave = useCallback(() => {
+    setPointerActive(false)
+    setPointerPos({ x: 0, y: 0 })
+  }, [])
+
+  // Scroll-linked hero behavior (for 3D canvas and particles)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -29,6 +58,10 @@ export default function Hero() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.6, 1], [1, 0.8, 0.3])
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.02])
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 60])
+
+  // Gentle pointer parallax for workflow layers — more pronounced than 3D logo rotation
+  const workflowParallaxX = prefersReduced || isTouch ? 0 : pointerPos.x * 18
+  const workflowParallaxY = prefersReduced || isTouch ? 0 : pointerPos.y * 10
 
   useEffect(() => {
     const timer = setTimeout(() => setCanvasReady(true), 200)
@@ -79,6 +112,8 @@ export default function Hero() {
         ref={sectionRef}
         className="relative min-h-[92vh] sm:min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#08090A] pt-24 pb-20"
         aria-label="Hero section"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
       >
         {/* 3D Agentic Intelligence Visual with scroll-linked behavior */}
         <motion.div
@@ -87,25 +122,89 @@ export default function Hero() {
           animate={{ opacity: canvasReady ? 1 : 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           style={{
-            opacity: prefersReducedMotion ? 1 : undefined,
-            transform: prefersReducedMotion ? undefined : heroScale,
-            y: prefersReducedMotion ? undefined : heroY,
+            opacity: prefersReduced ? 1 : undefined,
+            transform: prefersReduced ? undefined : heroScale,
+            y: prefersReduced ? undefined : heroY,
           }}
           aria-hidden="true"
         >
           <HeroCanvas />
         </motion.div>
 
-        {/* Restrained Radial Lighting Vignette */}
+        {/* Interactive particle layer — micro dust + cursor-reactive major motes */}
+        <motion.div
+          className="absolute inset-0 z-[1] pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: canvasReady ? 1 : 0 }}
+          transition={{ duration: 1.2, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          style={{ opacity: prefersReduced ? 1 : undefined }}
+          aria-hidden="true"
+        >
+          <HeroParticles />
+        </motion.div>
+
+        {/* Left Workflow Visualization — Knowledge & Research */}
+        <motion.div
+          className="absolute z-[3] pointer-events-none"
+          style={{ x: workflowParallaxX, y: workflowParallaxY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: canvasReady ? 1 : 0 }}
+          transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          aria-hidden="true"
+        >
+          <KnowledgeWorkflow />
+        </motion.div>
+
+        {/* Right Workflow Visualization — Software & Task Automation */}
+        <motion.div
+          className="absolute z-[3] pointer-events-none"
+          style={{ x: workflowParallaxX, y: workflowParallaxY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: canvasReady ? 1 : 0 }}
+          transition={{ duration: 1.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          aria-hidden="true"
+        >
+          <AutomationWorkflow />
+        </motion.div>
+
+        {/* Enhanced Radial Lighting Vignette with depth — warm copper glow behind logo */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 z-[1] pointer-events-none"
+          className="absolute inset-0 z-[4] pointer-events-none"
           style={{
             background: [
-              'radial-gradient(circle at 50% 45%, rgba(200, 125, 85, 0.04) 0%, transparent 60%)',
-              'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 35%, rgba(8, 9, 10, 0.75) 100%)',
-              'linear-gradient(180deg, rgba(8, 9, 10, 0.5) 0%, transparent 30%, transparent 70%, rgba(8, 9, 10, 0.95) 100%)',
+              'radial-gradient(circle at 50% 48%, rgba(229, 139, 78, 0.05) 0%, transparent 50%)',
+              'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 25%, rgba(8, 9, 10, 0.65) 100%)',
+              'linear-gradient(180deg, rgba(8, 9, 10, 0.35) 0%, transparent 20%, transparent 80%, rgba(8, 9, 10, 0.9) 100%)',
+              'radial-gradient(ellipse at 12% 50%, rgba(229, 139, 78, 0.025) 0%, transparent 35%)',
+              'radial-gradient(ellipse at 88% 50%, rgba(229, 139, 78, 0.025) 0%, transparent 35%)',
             ].join(', '),
+          }}
+        />
+
+        {/* Subtle edge gradients for depth — fade toward viewport edges */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-[4] pointer-events-none"
+          style={{
+            background: [
+              'linear-gradient(90deg, rgba(8, 9, 10, 0.55) 0%, transparent 18%)',
+              'linear-gradient(270deg, rgba(8, 9, 10, 0.55) 0%, transparent 18%)',
+            ].join(', '),
+          }}
+        />
+
+        {/* Extremely faint structural texture — receding lines toward edges */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-[2] pointer-events-none opacity-[0.015]"
+          style={{
+            backgroundImage: `
+              linear-gradient(90deg, rgba(154,161,158,0.1) 1px, transparent 1px),
+              linear-gradient(rgba(154,161,158,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '120px 120px',
+            maskImage: 'radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 80%)',
           }}
         />
 
@@ -115,23 +214,23 @@ export default function Hero() {
           initial="hidden"
           animate="show"
           className="relative z-10 max-w-[880px] mx-auto px-5 sm:px-8 text-center"
-          style={{ opacity: prefersReducedMotion ? 1 : undefined }}
+          style={{ opacity: prefersReduced ? 1 : undefined }}
         >
-          {/* Primary Brand Headline — light, commanding, elegant */}
+          {/* Primary Brand Headline — Sora display lockup with copper accent */}
           <motion.h1
             variants={itemFadeUp(0, 16)}
-            className="font-light tracking-[-0.04em] text-[#FAF8F5] leading-[0.95] mb-5 select-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]"
-            style={{ fontSize: 'clamp(3.2rem, 9vw, 6.5rem)' }}
+            className="text-display-hero hero-title-glow mb-5 select-none"
           >
-            Neomagnesis AI
+            Neomagnesis{' '}
+            <span className="hero-title-accent">AI</span>
           </motion.h1>
 
           {/* Defining Subtitle */}
           <motion.h2
             variants={itemFadeUp(0.05, 16)}
-            className="text-lg sm:text-2xl lg:text-3xl font-light tracking-[-0.02em] text-[#FAF8F5] max-w-2xl mx-auto mb-6 drop-shadow-[0_2px_16px_rgba(0,0,0,0.75)]"
+            className="text-display-hero-sub text-lg sm:text-2xl lg:text-3xl font-medium tracking-[-0.02em] text-[#FAF8F5] max-w-2xl mx-auto mb-6 drop-shadow-[0_2px_16px_rgba(0,0,0,0.75)]"
           >
-            A Local-First Agentic AI Operating System
+            AI that works through your workflows.
           </motion.h2>
 
           {/* Contextual Description — high contrast warm ivory-mist */}
@@ -139,8 +238,7 @@ export default function Hero() {
             variants={itemFadeUp(0.1, 16)}
             className="text-sm sm:text-base leading-relaxed text-[#E2E8E5] max-w-xl mx-auto mb-10 font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]"
           >
-            Autonomous intelligence executing on your personal silicon.
-            Local-first architecture, privacy-conscious design, and deterministic agent orchestration.
+            Build and run intelligent workflows that orchestrate tasks, use available tools, and execute actions — with a local-first architecture designed to give you greater control over your data and execution.
           </motion.p>
 
           {/* Action CTAs — standardized button sizing and hover/press behavior */}
@@ -212,7 +310,7 @@ export default function Hero() {
                 >
                   <Network size={13} className="text-[#FFAE70]" aria-hidden="true" />
                 </motion.span>
-                <span className="text-[#FAF8F5] font-medium">Inter-Agent Mesh</span>
+                <span className="text-[#FAF8F5] font-medium">Local-First Architecture</span>
               </div>
             </div>
           </motion.div>
